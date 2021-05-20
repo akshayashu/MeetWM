@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MeetWM</string>
+    <string name="enter_your_phone_number_to_sign_in">Enter your phone number to sign in</string>
+    <string name="welcome_to_meetwm">Welcome to MeetWM</string>
+    <string name="verification">Verification</string>
+    <string name="enter_the_otp_sent_to_xxxxxx">Enter the OTP sent to XXXXXX</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="verify">Verify</string>
+    <string name="submit">Submit</string>
+</resources>

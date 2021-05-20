@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "281206946984",
+    "firebase_url": "https://meetwm-4587c-default-rtdb.firebaseio.com",
+    "project_id": "meetwm-4587c",
+    "storage_bucket": "meetwm-4587c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281206946984:android:eca4e81b6aecbe99d1169d",
+        "android_client_info": {
+          "package_name": "com.akshay.meetwm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281206946984-nk4pk320mm1shcqpk9o1l8dq89sjjb67.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.akshay.meetwm",
+            "certificate_hash": "b75f589e478f4574e3161e55df033e102ac0bc52"
+          }
+        },
+        {
+          "client_id": "281206946984-clndfb1j2jluujeredhjc5i1pais3v8f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyLNXjhBsXCfWsFVAKuP_4ox3t4t2Nskc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281206946984-clndfb1j2jluujeredhjc5i1pais3v8f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
