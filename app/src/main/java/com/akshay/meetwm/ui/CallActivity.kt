@@ -26,9 +26,9 @@ class CallActivity : AppCompatActivity() {
     var friendUserName = ""
 
     var isPeerConnected = false
-//
-//    private val db = FirebaseFirestore.getInstance()
-//    private val userCollection = db.collection("users")
+
+    private val db = FirebaseFirestore.getInstance()
+    private val userCollection = db.collection("users")
 
     var firebaseRef = Firebase.database.getReference("users")
     var isAudio = true

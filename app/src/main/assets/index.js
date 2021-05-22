@@ -7,6 +7,11 @@ remoteVideo.style.opacity = 0
 localVideo.onplaying = () => { localVideo.style.opacity = 1 } 
 remoteVideo.onplaying = () => { remoteVideo.style.opacity = 1 }
 
+const constraints = {
+  video: true,
+  audio: true
+}
+
 let peer
 function init(userId) {
     peer = new Peer(userId, {
@@ -31,6 +36,9 @@ function listen() {
     peer.on('call', (call) => {
         navigator.getUserMedia({
             video: true,
+//                {
+//                   facingMode: "environment"
+//                 },
             audio: true
         }, (stream) => {
             localVideo.srcObject = stream
@@ -51,6 +59,9 @@ function startCall(otherUserId) {
 
     navigator.getUserMedia({
         video: true,
+//                {
+//                   facingMode: "environment"
+//                 },
         audio: true
     }, (stream) => {
 

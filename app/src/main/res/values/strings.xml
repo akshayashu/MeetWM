@@ -7,4 +7,7 @@
     <string name="mobile_number">Mobile Number</string>
     <string name="verify">Verify</string>
     <string name="submit">Submit</string>
+    <string name="continue_">Continue</string>
+    <string name="enter_your_status">Enter your status</string>
+    <string name="your_name">Your Name</string>
 </resources>

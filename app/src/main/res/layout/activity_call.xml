@@ -59,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+            android:textColor="#929292"
             android:hint="Whom do you want to call.."
             android:layout_toStartOf="@id/callBtn"/>
 
@@ -76,28 +77,40 @@
         android:id="@+id/callControlLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:visibility="gone"
+        android:gravity="center"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="64dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/videoToggleBtn"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:padding="5dp"
             android:layout_margin="10dp"
-            android:src="@drawable/ic_baseline_videocam_24"
-            android:background="#99000000"/>
-        <ImageView
+            app:civ_circle_background_color="#99000000"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="0.5dp"
+            android:src="@drawable/ic_baseline_videocam_24"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/endCallBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_baseline_call_end_24"
+            android:padding="2dp"
+            app:civ_circle_background_color="#99000000"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="0.5dp"
+            android:layout_margin="10dp"/>
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/audioToggleBtn"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:padding="5dp"
+            app:civ_circle_background_color="#99000000"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="0.5dp"
             android:layout_margin="10dp"
-            android:src="@drawable/ic_baseline_mic_24"
-            android:background="#99000000"/>
+            android:src="@drawable/ic_baseline_mic_24"/>
 
     </LinearLayout>
 
