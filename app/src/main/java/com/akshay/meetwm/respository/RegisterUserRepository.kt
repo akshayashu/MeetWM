@@ -9,42 +9,28 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegisterUserRepository(userContact: UserContact) {
+class RegisterUserRepository() {
 
-    var callResponse = MutableLiveData<String>()
-    var id = userContact.id
-    var user_name = userContact.user_name
-    var number = userContact.number
-    var status = userContact.status
-    var photo_url = userContact.photo_url
+    suspend fun registerUser(userContact: UserContact) : String{
+        val id = userContact.id
+        val user_name = userContact.user_name
+        val number = userContact.number
+        val status = userContact.status
+        val photo_url = userContact.photo_url
 
-    suspend fun registerUser(){
+        return try {
+            val call = RetrofitClient.apiInterface.registerUser(id, user_name, number, status, photo_url)
 
-        val call = RetrofitClient.apiInterface.registerUser(id, user_name, number, status, photo_url)
-
-        call.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                val newId : String
-                if(response.isSuccessful){
-                    newId = response.body().toString()
-                    setID(newId)
-                    Log.d("LOGGED IN", newId)
-                    callResponse.value = newId
-                }else{
-                    Log.d("LOGGED IN", response.errorBody().toString())
-                    callResponse.value = "ERROR"
-                }
+            if(call.isSuccessful){
+                call.body().toString()
+            }else{
+                "ERROR"
             }
+        }catch (e : Exception){
+            e.localizedMessage.toString()
+        }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.d("LOGGED IN", t.localizedMessage)
-                callResponse.value = "ERROR"
-            }
 
-        })
     }
 
-    fun setID(uid : String){
-        callResponse.value = uid
-    }
 }

@@ -35,7 +35,7 @@ class RegisterUser : AppCompatActivity() {
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         ).get(RegistrationViewModel::class.java)
 
-        viewModel.response?.observe(this, {
+        viewModel.response.observe(this, {
             Log.d("ViewModel - ", "RECEIVED $it")
             if(it == "ERROR" || it == null ){
                 progressBar.visibility = View.GONE
