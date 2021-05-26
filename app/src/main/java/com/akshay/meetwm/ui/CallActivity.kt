@@ -9,7 +9,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import com.akshay.meetwm.JavascriptInterface
+import com.akshay.meetwm.appInterface.JavascriptInterface
 import com.akshay.meetwm.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

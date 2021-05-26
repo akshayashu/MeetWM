@@ -55,6 +55,13 @@ dependencies {
     implementation 'com.github.GoodieBag:Pinview:v1.4'
     implementation 'com.hbb20:ccp:2.5.1'
 
+    def retrofit_version = "2.9.0"
+    def logging_version = "4.8.1"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$logging_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$logging_version"
+
     // MVVM
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "androidx.activity:activity-ktx:$rootProject.activityVersion"

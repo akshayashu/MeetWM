@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.akshay.meetwm.R
+import com.akshay.meetwm.ui.RegisterUser.RegisterUser
 import com.akshay.meetwm.ui.contact.ContactActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -119,7 +120,8 @@ class OTPVerify : AppCompatActivity() {
         mAuth.signInWithCredential(credential).addOnCompleteListener {
             if(it.isSuccessful){
                 //start New Activity
-                val intent = Intent(this, ContactActivity::class.java)
+                val intent = Intent(this, RegisterUser::class.java)
+                intent.putExtra("phone", phoneNo)
                 startActivity(intent)
                 Log.d("OTP", "OTP IS VERIFIED !")
             }else{

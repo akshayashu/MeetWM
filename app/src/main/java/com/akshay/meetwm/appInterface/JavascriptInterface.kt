@@ -1,4 +1,4 @@
-package com.akshay.meetwm
+package com.akshay.meetwm.appInterface
 
 import android.webkit.JavascriptInterface
 import com.akshay.meetwm.ui.CallActivity

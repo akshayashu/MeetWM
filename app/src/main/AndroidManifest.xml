@@ -15,15 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MeetWM"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.provideDetails.ProvideDetailsActivity"></activity>
+        <activity android:name=".ui.SplashScreenActivity"></activity>
         <activity android:name=".ui.contact.ContactActivity" />
         <activity android:name=".ui.SignInActivity" />
         <activity android:name=".ui.otpVerify.OTPVerify" />
-        <activity android:name=".ui.SplashScreenActivity" />
+        <activity android:name=".ui.CallActivity" />
         <activity
-            android:name=".ui.CallActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/Theme.MeetWM.fullscreen" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.RegisterUser.RegisterUser">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
