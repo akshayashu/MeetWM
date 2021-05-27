@@ -1,4 +1,4 @@
-package com.akshay.meetwm.ui
+package com.akshay.meetwm.ui.signInActivity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

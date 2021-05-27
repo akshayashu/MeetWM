@@ -1,4 +1,4 @@
-package com.akshay.meetwm.ui
+package com.akshay.meetwm.ui.main
 
 import android.Manifest
 import android.content.Intent
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import com.akshay.meetwm.R
+import com.akshay.meetwm.ui.callActivity.CallActivity
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,19 +22,40 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        configureTabLayout()
         if(!isPermissionGranted()){
             askPermissions()
         }
 
         Firebase.initialize(this)
 
-        login.setOnClickListener {
-            val username = userNameEdit.text.toString().trim()
-            val intent = Intent(this, CallActivity::class.java)
-            intent.putExtra("username", username)
-            startActivity(intent)
-        }
+//        login.setOnClickListener {
+//            val username = userNameEdit.text.toString().trim()
+//            val intent = Intent(this, CallActivity::class.java)
+//            intent.putExtra("username", username)
+//            startActivity(intent)
+//        }
         
+    }
+
+    private fun configureTabLayout() {
+
+        val adapter = PageAdapter(supportFragmentManager, lifecycle)
+        pager.adapter = adapter
+
+        TabLayoutMediator(tabLayout, pager){tab, position ->
+            when(position){
+                0 -> {
+                    tab.text = "Chat"
+                }
+                1 -> {
+                    tab.text = "Status"
+                }
+                2 -> {
+                    tab.text = "History"
+                }
+            }
+        }.attach()
     }
 
     private fun isPermissionGranted(): Boolean {
