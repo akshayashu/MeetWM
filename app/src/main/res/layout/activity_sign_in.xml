@@ -23,11 +23,11 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="25dp"
         android:layout_marginBottom="40dp"
         android:fontFamily="@font/allerta"
         android:text="@string/enter_your_phone_number_to_sign_in"
-        android:textColor="#727272"
+        android:textColor="@color/blue"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent" />
@@ -36,9 +36,11 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="40dp"
         android:gravity="center"
-        android:background="@drawable/round_strip_orange"
+        android:background="@drawable/round_strip_blue"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +86,8 @@
         android:layout_marginTop="60dp"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:background="@drawable/orange_background"
+        android:elevation="10dp"
+        android:background="@drawable/blue_background"
         android:fontFamily="@font/allerta"
         android:gravity="center"
         android:padding="10dp"
@@ -100,11 +103,19 @@
         android:id="@+id/progressBar"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:backgroundTint="#FB5C2A"
         android:visibility="gone"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/secondary_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/verifyBtn" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

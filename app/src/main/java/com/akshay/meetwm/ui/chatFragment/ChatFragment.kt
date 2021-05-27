@@ -1,11 +1,14 @@
 package com.akshay.meetwm.ui.chatFragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.akshay.meetwm.R
+import com.akshay.meetwm.ui.callActivity.CallActivity
+import kotlinx.android.synthetic.main.fragment_chat.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +34,16 @@ class ChatFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        login.setOnClickListener {
+            val username = userNameEdit.text.toString().trim()
+            val intent = Intent(this.activity, CallActivity::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
+        }
     }
 
     companion object {

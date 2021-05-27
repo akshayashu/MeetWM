@@ -21,6 +21,6 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
 
     fun register(userContact: UserContact) = viewModelScope.launch{
         response.value = repo.registerUser(userContact)
-        Log.d("ViewModel - ", "RECEIVED $response")
+        Log.d("ViewModel - ", "RECEIVED ${response.value}")
     }
 }

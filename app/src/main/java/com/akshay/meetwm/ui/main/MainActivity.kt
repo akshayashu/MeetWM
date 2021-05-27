@@ -5,8 +5,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.akshay.meetwm.R
+import com.akshay.meetwm.ui.SharedPref
 import com.akshay.meetwm.ui.callActivity.CallActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
@@ -27,14 +29,15 @@ class MainActivity : AppCompatActivity() {
             askPermissions()
         }
 
-        Firebase.initialize(this)
+        val pref = SharedPref(this)
 
-//        login.setOnClickListener {
-//            val username = userNameEdit.text.toString().trim()
-//            val intent = Intent(this, CallActivity::class.java)
-//            intent.putExtra("username", username)
-//            startActivity(intent)
-//        }
+        Log.d("Username", pref.getUserName().toString())
+        Log.d("UserPhoto", pref.getUserImageBitmap().toString())
+        Log.d("UserStatus", pref.getUserStatus().toString())
+        Log.d("UserPhone", pref.getUserNumber().toString())
+        Log.d("UserID", pref.getUserID().toString())
+
+        Firebase.initialize(this)
         
     }
 

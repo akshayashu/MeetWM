@@ -12,7 +12,9 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.UserContact
+import com.akshay.meetwm.ui.SharedPref
 import com.akshay.meetwm.ui.contact.ContactActivity
+import com.akshay.meetwm.ui.main.MainActivity
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_register_user.*
 import org.json.JSONObject
@@ -28,6 +30,7 @@ class RegisterUser : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_user)
 
+        val pref = SharedPref(this)
         val phoneNumber = "+919871736205"
         //intent.getStringExtra("phone")!!
 
@@ -36,13 +39,14 @@ class RegisterUser : AppCompatActivity() {
         ).get(RegistrationViewModel::class.java)
 
         viewModel.response.observe(this, {
-            Log.d("ViewModel - ", "RECEIVED $it")
+
             if(it == "ERROR" || it == null ){
                 progressBar.visibility = View.GONE
                 Toast.makeText(this, "SOME ERROR OCCURED!", Toast.LENGTH_LONG).show()
             }else{
+                pref.setUserID(it.toString())
                 progressBar.visibility = View.GONE
-                val intent = Intent(this, ContactActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
@@ -57,10 +61,15 @@ class RegisterUser : AppCompatActivity() {
         }
 
         continueBtn.setOnClickListener {
-
             val userName = userNameEditText.text.toString().trim()
             val status = statusEditText.text.toString().trim()
             if(userName.isNotEmpty()){
+
+                pref.setUserName(userName)
+                pref.setUserImageBitmap(imageUrl)
+                pref.setUserNumber(phoneNumber)
+                pref.setUserStatus(status)
+
                 progressBar.visibility = View.VISIBLE
                 val userContact = UserContact("", userName, phoneNumber, status, imageUrl)
                 viewModel.register(userContact)

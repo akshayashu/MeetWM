@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    const val url = "http://192.168.0.4:9000/api/"
+    const val url = "https://meet-wm.herokuapp.com/api/"
 
     private val retrofitClient : Retrofit.Builder by lazy{
 

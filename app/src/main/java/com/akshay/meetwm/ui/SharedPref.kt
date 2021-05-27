@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 class SharedPref(context : Context) {
 
     private val preferenceFile = "MySharedPreferences"
+    private val userId = "id"
     private val userName = "name"
     private val userNumber = "number"
     private val userImageBitmap = "bitmap"
@@ -14,6 +15,15 @@ class SharedPref(context : Context) {
 
     private val preferences : SharedPreferences = context.getSharedPreferences(preferenceFile, Context.MODE_PRIVATE)
     private val editor : SharedPreferences.Editor = preferences.edit()
+
+    fun getUserID() : String?{
+        return preferences.getString(userId, "id")
+    }
+
+    fun setUserID(id : String){
+        editor.putString(userId, id)
+        editor.apply()
+    }
 
     fun getUserName() : String?{
         return preferences.getString(userName, "name")

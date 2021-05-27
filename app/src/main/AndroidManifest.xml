@@ -19,10 +19,11 @@
         <activity android:name=".ui.contact.ContactActivity" />
         <activity android:name=".ui.signInActivity.SignInActivity" />
         <activity android:name=".ui.otpVerify.OTPVerify" />
-        <activity android:name=".ui.callActivity.CallActivity" />
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.callActivity.CallActivity"
             android:theme="@style/Theme.MeetWM.fullscreen" />
+        <activity
+            android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

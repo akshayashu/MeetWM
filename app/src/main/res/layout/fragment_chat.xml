@@ -5,22 +5,35 @@
     android:layout_height="match_parent"
     tools:context=".ui.chatFragment.ChatFragment">
 
-    <EditText
-        android:id="@+id/userNameEdit"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your name"
-        android:padding="10dp"
-        android:layout_margin="10dp"
-        android:textSize="16sp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/userNameEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your name"
+            android:padding="10dp"
+            android:background="@drawable/round_strip_blue"
+            android:layout_margin="10dp"
+            android:textSize="16sp"/>
 
-    <Button
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:padding="10dp"
-        android:layout_margin="10dp"
-        android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:fontFamily="@font/allerta"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/blue_background"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+
 
 </FrameLayout>

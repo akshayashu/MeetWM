@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.akshay.meetwm.R
-import com.akshay.meetwm.ui.contact.ContactActivity
+import com.akshay.meetwm.ui.main.MainActivity
 import com.akshay.meetwm.ui.otpVerify.OTPVerify
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -18,7 +18,7 @@ class SignInActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if(user != null){
-            startActivity(Intent(this, ContactActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             this.finish()
         }
     }
