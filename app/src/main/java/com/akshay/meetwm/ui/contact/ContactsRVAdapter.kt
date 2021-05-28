@@ -16,6 +16,7 @@ class ContactsRVAdapter(private val listener: IContactsRVAdapter) : RecyclerView
         val name: TextView = itemView.findViewById(R.id.name)
         val number: TextView = itemView.findViewById(R.id.contactNumber)
         val deleteBtn: ImageView = itemView.findViewById(R.id.deleteBtn)
+        val status : TextView = itemView.findViewById(R.id.status)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewModel {
@@ -28,8 +29,9 @@ class ContactsRVAdapter(private val listener: IContactsRVAdapter) : RecyclerView
 
     override fun onBindViewHolder(holder: NoteViewModel, position: Int) {
         val cur = allContacts[position]
-        holder.name.text = cur.name
+        holder.name.text = cur.display_name
         holder.number.text = cur.number
+        holder.status.text = cur.status
     }
 
     override fun getItemCount(): Int {

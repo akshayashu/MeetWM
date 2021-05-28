@@ -44,11 +44,27 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pager"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_24"
+            android:layout_alignParentBottom="true"
+            android:contentDescription="@string/contacts"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="20dp"
+            android:padding="5dp"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
+
 
 </LinearLayout>
