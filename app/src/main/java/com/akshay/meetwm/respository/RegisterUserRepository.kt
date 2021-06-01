@@ -6,7 +6,7 @@ import com.akshay.meetwm.retrofit.RetrofitClient
 class RegisterUserRepository() {
 
     suspend fun registerUser(userContact: UserContact) : String{
-        val id = userContact.id
+        val id = userContact._id
         val user_name = userContact.user_name
         val number = userContact.number
         val status = userContact.status

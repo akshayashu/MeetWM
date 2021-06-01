@@ -30,7 +30,7 @@ class OTPVerify : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otpverify)
 
-        val timer = object: CountDownTimer(60000, 1000) {
+        val timer = object: CountDownTimer(90000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 timerText.visibility = View.VISIBLE
                 timerText.text = "in " + (millisUntilFinished/1000).toString() + "sec"
@@ -72,7 +72,7 @@ class OTPVerify : AppCompatActivity() {
         val option = PhoneAuthOptions.newBuilder(mAuth)
             .setPhoneNumber(phoneNo)
             .setActivity(this)
-            .setTimeout(60L, TimeUnit.SECONDS)
+            .setTimeout(90L, TimeUnit.SECONDS)
             .setCallbacks(callback)
             .build()
 
@@ -85,7 +85,7 @@ class OTPVerify : AppCompatActivity() {
                 timer.start()
                 val optionResend = PhoneAuthOptions.newBuilder(mAuth)
                     .setPhoneNumber(phoneNo)
-                    .setTimeout(60L, TimeUnit.SECONDS)
+                    .setTimeout(90L, TimeUnit.SECONDS)
                     .setActivity(this)
                     .setCallbacks(callback)
                     .setForceResendingToken(resendToken)

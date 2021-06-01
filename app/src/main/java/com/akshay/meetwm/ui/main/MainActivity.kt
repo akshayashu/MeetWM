@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
     private val requestCode = 1
 
-//    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
     private var list = ArrayList<Contact>()
 
     override fun onStart() {
@@ -44,15 +44,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //set up view
-//        viewModel = ViewModelProvider(this,
-//               ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
-//
-//
-//        viewModel.getContact()
-//        viewModel.list.observe(this, {
-//            list = it
-//            updateList()
-//        })
+        viewModel = ViewModelProvider(this,
+               ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
+
+
+        viewModel.getContact()
+        viewModel.list.observe(this, {
+            list = it
+            updateList()
+        })
         configureTabLayout()
 
         showPref()
@@ -65,12 +65,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun updateList() {
-//        for(item in list) {
-//            viewModel.insertContact(item)
-//            Log.d("Contacts", "${item.display_name} , ${item.number}, ${item.id}")
-//        }
-//    }
+    private fun updateList() {
+        for(item in list) {
+            viewModel.insertContact(item)
+            Log.d("Contacts", "${item.display_name} , ${item.number}, ${item.id}")
+        }
+    }
 
     private fun showPref() {
         val pref = SharedPref(this)

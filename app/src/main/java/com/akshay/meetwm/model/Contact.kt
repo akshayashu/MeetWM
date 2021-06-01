@@ -9,7 +9,7 @@ class Contact(
     var display_name : String,
     var number : String,
     var status : String,
-    var dp_bitmap : String,
+    var dp_url : String,
     var unseen_msg_count : String,
     var is_meet_user : Boolean,
     var uid : String,

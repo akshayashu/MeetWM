@@ -20,9 +20,9 @@ object RetrofitClient {
         logging.setLevel(Level.BODY)
 
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(40, TimeUnit.SECONDS)
+            .writeTimeout(40, TimeUnit.SECONDS)
         okHttpClient.addInterceptor(logging)
 
         val gson: Gson = GsonBuilder()

@@ -32,6 +32,17 @@
             android:padding="10dp"
             android:layout_margin="10dp"
             android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/signoutBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Out"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_strip_blue"/>
     </LinearLayout>
 
 

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.akshay.meetwm.R
@@ -33,6 +34,7 @@ class SignInActivity : AppCompatActivity() {
             askPermissions()
         }
         if(user != null){
+            Log.d("USERRRRR", user.toString())
             startActivity(Intent(this, MainActivity::class.java))
             this.finish()
         }
@@ -74,8 +76,5 @@ class SignInActivity : AppCompatActivity() {
 
     private fun askPermissions() {
         ActivityCompat.requestPermissions(this, permissions, requestCode)
-//        if(!isPermissionGranted()){
-//            askPermissions()
-//        }
     }
 }

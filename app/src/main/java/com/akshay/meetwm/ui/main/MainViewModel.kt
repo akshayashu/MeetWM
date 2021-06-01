@@ -28,7 +28,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getContact() = viewModelScope.launch(Dispatchers.IO) {
-        list.value = mainRepo.loadContacts()
+        list.postValue(mainRepo.loadContacts())
     }
 
     fun insertContact(contact: Contact) = viewModelScope.launch(Dispatchers.IO) {

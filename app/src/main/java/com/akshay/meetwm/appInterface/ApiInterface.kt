@@ -1,6 +1,6 @@
 package com.akshay.meetwm.appInterface
 
-import retrofit2.Call
+import com.akshay.meetwm.model.UserContact
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -18,4 +18,11 @@ interface ApiInterface {
         @Field("status") status: String,
         @Field("photo_url") url : String
     ) : Response<String>
+
+
+    @FormUrlEncoded
+    @POST("get_registered_user")
+    suspend fun getRegisteredUser(
+        @Field("number") number : ArrayList<String>
+    ) : Response<ArrayList<UserContact>>
 }
