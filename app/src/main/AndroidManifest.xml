@@ -6,10 +6,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,15 +19,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MeetWM"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.RegisterUser.RegisterUser"></activity>
+        <activity android:name=".ui.ChatActivity"></activity>
+        <activity android:name=".ui.RegisterUser.RegisterUser" />
         <activity android:name=".ui.contact.ContactActivity" />
         <activity android:name=".ui.signInActivity.SignInActivity" />
         <activity android:name=".ui.otpVerify.OTPVerify" />
         <activity
             android:name=".ui.callActivity.CallActivity"
             android:theme="@style/Theme.MeetWM.fullscreen" />
-        <activity
-            android:name=".ui.main.MainActivity"/>
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

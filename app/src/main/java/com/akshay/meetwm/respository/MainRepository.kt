@@ -6,6 +6,8 @@ import android.util.Log
 import com.akshay.meetwm.model.Contact
 import com.akshay.meetwm.model.UserContact
 import com.akshay.meetwm.retrofit.RetrofitClient
+import com.google.gson.Gson
+import org.json.JSONObject
 import java.lang.Exception
 
 class MainRepository(private val contentResolver: ContentResolver) {
@@ -18,8 +20,11 @@ class MainRepository(private val contentResolver: ContentResolver) {
 
     private var list = ArrayList<Contact>()
     private var map = HashMap<String, Contact>()
-    val numberList = ArrayList<String>()
+    private val numberList = ArrayList<String>()
 
+    data class numberrrrrr(
+        val number : List<String>
+    )
     suspend fun loadContacts() : ArrayList<Contact>{
 
         if(cursor?.count!! > 0){
@@ -42,12 +47,16 @@ class MainRepository(private val contentResolver: ContentResolver) {
 
                 if(phoneCursor?.moveToNext()!!){
 
-                    val phone = phoneCursor.let {
+                    var phone = phoneCursor.let {
                         phoneCursor.getString(
                             it.getColumnIndex(
                                 ContactsContract.CommonDataKinds.Phone.NUMBER
                             ))
                     }
+                    if(phone.substring(0, 3) != "+91"){
+                        phone = "+91${phone}"
+                    }
+                    phone = phone.replace(" ","")
 
                     map[phone] = Contact(
                         "", name,
@@ -72,19 +81,23 @@ class MainRepository(private val contentResolver: ContentResolver) {
         }
 
         try {
-            var response = RetrofitClient.apiInterface.getRegisteredUser(numberList)
+//            val jsonObject = Gson().toJson(numberrrrrr(numberList))
+//            numberList.add("+919911397711")
+            val response = RetrofitClient.apiInterface.getRegisteredUser(numberrrrrr(numberList))
             if(response.isSuccessful){
+//
                 setList(response.body()!!)
-                Log.d("RESPONSE", response.body().toString())
+//                Log.d("RESPONSE", response.body().toString())
             }
         }catch(e : Exception){
-            Log.d("MAIN REPO EXCEPTION", e.localizedMessage.toString())
+            e.printStackTrace()
+//            Log.d("MAIN REPO EXCEPTION", e.localizedMessage.toString())
         }
 
         return list
     }
 
-    fun setList(ll: ArrayList<UserContact>){
+    fun setList(ll: List<UserContact>){
         for(cont in ll){
             val ele = map[cont.number]!!
             list.add(Contact(

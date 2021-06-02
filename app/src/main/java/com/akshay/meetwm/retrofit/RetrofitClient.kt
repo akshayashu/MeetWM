@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    const val url = "https://meet-wm.herokuapp.com/api/"
+    const val url = "http://meet-wm.herokuapp.com/api/"
 
     private val retrofitClient : Retrofit.Builder by lazy{
 

@@ -40,7 +40,7 @@
         android:paddingStart="5dp"
         android:textColor="#626262"
         android:textSize="12sp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/name"
         app:layout_constraintStart_toEndOf="@+id/name"
         app:layout_constraintTop_toTopOf="@id/name"

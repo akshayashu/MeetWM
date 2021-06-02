@@ -1,7 +1,9 @@
 package com.akshay.meetwm.appInterface
 
 import com.akshay.meetwm.model.UserContact
+import com.akshay.meetwm.respository.MainRepository
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -20,9 +22,8 @@ interface ApiInterface {
     ) : Response<String>
 
 
-    @FormUrlEncoded
     @POST("get_registered_user")
     suspend fun getRegisteredUser(
-        @Field("number") number : ArrayList<String>
-    ) : Response<ArrayList<UserContact>>
+        @Body number : MainRepository.numberrrrrr
+    ) : Response<List<UserContact>>
 }
