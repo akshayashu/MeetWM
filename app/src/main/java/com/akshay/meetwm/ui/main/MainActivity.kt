@@ -6,16 +6,19 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.Contact
+import com.akshay.meetwm.socket.SocketInstance
 import com.akshay.meetwm.ui.SharedPref
 import com.akshay.meetwm.ui.callActivity.CallActivity
 import com.akshay.meetwm.ui.contact.ContactActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
+import io.socket.client.Socket
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
     private val requestCode = 1
+
+    private lateinit var mSocket : Socket
 
     private lateinit var viewModel: MainViewModel
     private var list = ArrayList<Contact>()
@@ -62,6 +67,34 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             val intent = Intent(this, ContactActivity::class.java)
             startActivity(intent)
+        }
+        try {
+            val socketInstance = application as SocketInstance
+            mSocket = socketInstance.getSocketInstance()
+
+            mSocket.connect()
+
+//            mSocket.on(Socket.EVENT_CONNECT, onConnect)
+//            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
+//            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
+            val myUID = SharedPref(applicationContext).getUserID()
+            mSocket.emit("join", myUID)
+            Log.d("SOCKET", "CREATED in Main")
+        }catch (e : Exception){
+            Log.d("SOCKET EXCEPTION", e.localizedMessage)
+        }
+
+        mSocket.on("message"){
+            if (it != null) {
+                val data = it[0]
+
+                Log.d("SOCKET MESSAGE", data.toString())
+//                val messageData = Gson().fromJson(data.toString(), MessageClass::class.java)
+                runOnUiThread {
+//                    textview.text = data.toString()
+                    Toast.makeText(this, "$data received from Socket", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
