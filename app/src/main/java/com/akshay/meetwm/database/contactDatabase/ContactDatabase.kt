@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.Contact
+import com.akshay.meetwm.model.MessageData
 
-@Database(entities = [Contact::class], version = 1, exportSchema = false)
+@Database(entities = [Contact::class, ChatModel::class, MessageData::class], version = 1, exportSchema = false)
 abstract class ContactDatabase : RoomDatabase() {
 
     abstract fun getContactDao() : ContactDao

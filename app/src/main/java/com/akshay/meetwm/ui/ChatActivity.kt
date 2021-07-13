@@ -15,6 +15,8 @@ import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_chat.*
 import okhttp3.OkHttpClient
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 
@@ -55,7 +57,11 @@ class ChatActivity : AppCompatActivity() {
 
 
         sendBtn.setOnClickListener {
-            val myMessage = MessageData(senderUID, receiverUID, editText.text.toString())
+            val time = System.currentTimeMillis().toString()
+            val id = senderUID + time
+            val myMessage = MessageData(id,"sent", senderUID, "text_msg",
+                "", "","",
+                editText.text.toString(), "", time)
             Log.d("My message", Gson().toJson(myMessage))
             mSocket.emit("sendMessage", Gson().toJson(myMessage))
         }

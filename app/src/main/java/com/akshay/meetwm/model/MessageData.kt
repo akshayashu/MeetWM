@@ -1,10 +1,14 @@
 package com.akshay.meetwm.model
 
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+
+@Entity
 data class MessageData(
-    var id: String,
+    @PrimaryKey(autoGenerate = false) var id: String,
     var status: String,
-    var senderUID: String,
-    var receiverUID : String,
+    var sender_uid : String,
     var data_type: String,
     var data_url: String,
     var data_name: String,

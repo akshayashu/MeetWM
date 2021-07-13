@@ -27,9 +27,7 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.CAMERA,
         Manifest.permission.RECORD_AUDIO,
         Manifest.permission.READ_CONTACTS,
-        Manifest.permission.WRITE_CONTACTS,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        Manifest.permission.WRITE_CONTACTS)
     private val requestCode = 1
 
     private lateinit var mSocket : Socket

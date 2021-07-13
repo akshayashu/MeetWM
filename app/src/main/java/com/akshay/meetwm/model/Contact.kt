@@ -14,5 +14,4 @@ class Contact(
     var is_meet_user : Boolean,
     var uid : String,
     @PrimaryKey var id : String
-    ){
-}
+    )
