@@ -9,7 +9,7 @@ data class ChatAndMessages(
     var chat : ChatModel,
     @Relation(
         parentColumn = "uid",
-        entityColumn = "sender_uid"
+        entityColumn = "chat_uid"
     )
     var messages : List<MessageData>
 )

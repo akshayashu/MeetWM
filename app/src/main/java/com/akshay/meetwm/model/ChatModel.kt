@@ -10,5 +10,5 @@ data class ChatModel(
     var number: String,
     var staus: String,
     var name: String,
-    var new_messages: Int,
+    var unseen_count: Int
 )

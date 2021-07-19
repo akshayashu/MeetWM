@@ -42,15 +42,15 @@ class ContactsRVAdapter(private val listener: IContactsRVAdapter) : RecyclerView
         holder.name.text = cur.display_name
         holder.number.text = cur.number
         holder.status.text = cur.status
-        Glide.with(context).setDefaultRequestOptions(RequestOptions().placeholder(R.drawable.blue_background).error(R.drawable.blank_person))
-            .load(cur.dp_url).into(holder.dpImageView)
+        Glide.with(context).load(cur.dp_url).into(holder.dpImageView)
 
         holder.name.setOnClickListener {
             val myUID = SharedPref(context).getUserID()
             val intent = Intent(context.applicationContext, ChatActivity::class.java)
             intent.putExtra("name", cur.global_name)
-            intent.putExtra("receiverUID", cur.uid)
-            intent.putExtra("senderUID", myUID)
+            intent.putExtra("chatUID", cur.uid)
+            intent.putExtra("myUID", myUID)
+            intent.putExtra("chatNumber", cur.number)
             context.startActivity(intent)
         }
 

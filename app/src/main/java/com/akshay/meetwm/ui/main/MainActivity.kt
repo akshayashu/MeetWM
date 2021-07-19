@@ -3,23 +3,27 @@ package com.akshay.meetwm.ui.main
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.Contact
+import com.akshay.meetwm.model.MessageData
+import com.akshay.meetwm.model.ReceivedMessage
 import com.akshay.meetwm.socket.SocketInstance
 import com.akshay.meetwm.ui.SharedPref
-import com.akshay.meetwm.ui.callActivity.CallActivity
 import com.akshay.meetwm.ui.contact.ContactActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
+import com.google.gson.Gson
 import io.socket.client.Socket
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,6 +60,8 @@ class MainActivity : AppCompatActivity() {
             list = it
             updateList()
         })
+
+        val intent = Intent("my-event")
         configureTabLayout()
 
         showPref()
@@ -82,16 +88,37 @@ class MainActivity : AppCompatActivity() {
             Log.d("SOCKET EXCEPTION", e.localizedMessage)
         }
 
+        mSocket.on("received"){
+            // update msg receive time
+            if(it != null)
+                Log.d("MESSAGE", "Received ${it[0].toString()}")
+        }
+
+        mSocket.on("seen"){
+            // update msg receive time
+            if(it != null)
+                Log.d("MESSAGE", "Seen ${it[0].toString()}")
+        }
+
+        //received message
         mSocket.on("message"){
             if (it != null) {
                 val data = it[0]
+                val time = System.currentTimeMillis().toString()
 
                 Log.d("SOCKET MESSAGE", data.toString())
-//                val messageData = Gson().fromJson(data.toString(), MessageClass::class.java)
+                val messageData = Gson().fromJson(data.toString(), MessageData::class.java)
+                viewModel.insertChat(messageData)
+
+                val receivedMessage = ReceivedMessage(messageData.chat_uid, time)
+                mSocket.emit("receivedMessage", Gson().toJson(receivedMessage))
+
                 runOnUiThread {
 //                    textview.text = data.toString()
                     Toast.makeText(this, "$data received from Socket", Toast.LENGTH_SHORT).show()
                 }
+                intent.putExtra("data", "newMessage,${messageData.chat_uid}");
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             }
         }
     }
@@ -145,5 +172,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun askPermissions() {
         ActivityCompat.requestPermissions(this, permissions, requestCode)
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        val pref = SharedPref(this)
+        mSocket.emit("disconnect", pref.getUserID())
+        Log.d("SOCKET", "Destroyed")
     }
 }

@@ -8,12 +8,15 @@ import androidx.room.PrimaryKey
 data class MessageData(
     @PrimaryKey(autoGenerate = false) var id: String,
     var status: String,
-    var sender_uid : String,
+    var chat_uid: String,
+    var sender_uid: String,
+    var receiver_uid: String,
     var data_type: String,
     var data_url: String,
-    var data_name: String,
+    var data_path: String, //path from the local storage
     var replied_data_id: String,
     var data : String,
     var received_timestamp: String,
     var send_timestamp : String,
+    var read_timestamp: String,
 )
