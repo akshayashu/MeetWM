@@ -4,11 +4,11 @@ This is an android app which is just like whatsApp messenger.
 
 ## What does it offers🤔
 
-* Users can chat in real-time with accurate delivery reports, seen or unseen messages, online or offline status. And you know what important aspects it covers - 𝐏𝐫𝐢𝐯𝐚𝐜𝐲👀. 
+* Users can chat in real-time with accurate delivery reports, seen or unseen messages, online or offline status. And you know what important aspects it cover - 𝐏𝐫𝐢𝐯𝐚𝐜𝐲👀. 
 
 * Messages and media files are encrypted too.❌
 
-* One can call their family/friends as long as they want. End-to-End encryption is also ensured😏
+* One can call his/her family members/friends as long as they want. End-to-End encryption is also ensured😏
 
 * You can face-time with your loved ones, it provides videocalling as well.👁‍🗨
 
