@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit
 
 class SocketInstance : Application() {
 
-    //    "https://meet-wm.herokuapp.com/"
-    private val URL = "http://192.168.0.4:9000/"
+    //    "http://192.168.0.4:9000/"
+    private val URL = "https://meet-wm.herokuapp.com/"
     private lateinit var mSocket : Socket
 
     override fun onCreate() {

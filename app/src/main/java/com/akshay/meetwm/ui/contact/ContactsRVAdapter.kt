@@ -9,10 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.model.Contact
-import com.akshay.meetwm.ui.ChatActivity
+import com.akshay.meetwm.ui.chatActivity.ChatActivity
 import com.akshay.meetwm.ui.SharedPref
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 
 class ContactsRVAdapter(private val listener: IContactsRVAdapter) : RecyclerView.Adapter<ContactsRVAdapter.NoteViewModel>() {
 

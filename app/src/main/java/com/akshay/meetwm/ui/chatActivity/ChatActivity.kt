@@ -1,4 +1,4 @@
-package com.akshay.meetwm.ui
+package com.akshay.meetwm.ui.chatActivity
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,7 +15,6 @@ import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.MessageData
 import com.akshay.meetwm.model.SeenMessage
 import com.akshay.meetwm.socket.SocketInstance
-import com.akshay.meetwm.ui.callActivity.ChatViewModel
 import com.google.gson.Gson
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
@@ -48,9 +47,9 @@ class ChatActivity : AppCompatActivity() {
             val socketInstance = application as SocketInstance
             mSocket = socketInstance.getSocketInstance()
 
-            mSocket.on(Socket.EVENT_CONNECT, onConnect)
-            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
-            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
+//            mSocket.on(Socket.EVENT_CONNECT, onConnect)
+//            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
+//            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
 
             mSocket.emit("join", myUID)
         }catch (e : Exception){
@@ -62,8 +61,8 @@ class ChatActivity : AppCompatActivity() {
             IntentFilter("my-event")
         )
 
-        viewModel = ViewModelProvider(this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(ChatViewModel::class.java)
+        val chatViewModelFactory = ChatViewModelFactory(application, chatUID);
+        viewModel = ViewModelProvider(this, chatViewModelFactory).get(ChatViewModel::class.java)
 
         viewModel.allChatMessages.observe(this, { list ->
             list?.let {
@@ -82,13 +81,14 @@ class ChatActivity : AppCompatActivity() {
             }
             val myMessage = MessageData(id,"sent", chatUID, myUID, chatUID,"text_msg",
                 "", "","",
-                editText.text.toString().trim(), "", time,"")
+                editText.text.toString().trim(), "not_yet", time,"not_yet")
 //            Log.d("My message", Gson().toJson(myMessage))
 
             mSocket.emit("sendMessage", Gson().toJson(myMessage))
 
             viewModel.insertChat(ChatModel(chatUID, chatNumber, "offline", username, 0))
             viewModel.insertMessage(myMessage)
+            editText.text = ""
         }
 
 
@@ -99,8 +99,9 @@ class ChatActivity : AppCompatActivity() {
             // Get data from intent and update
             if(intent != null){
                 val time = System.currentTimeMillis().toString()
-                val id  = intent.getStringExtra("data")!!.split(",")[1]
-                val seenMessage = SeenMessage(id, time);
+                val chat_id  = intent.getStringExtra("data")!!.split(",")[1]
+                val id  = intent.getStringExtra("data")!!.split(",")[2]
+                val seenMessage = SeenMessage(chat_id, myUID, id, time);
                 mSocket.emit("seenMessage", Gson().toJson(seenMessage))
             }
         }

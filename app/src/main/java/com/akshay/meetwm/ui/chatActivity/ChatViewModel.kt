@@ -1,4 +1,4 @@
-package com.akshay.meetwm.ui.callActivity
+package com.akshay.meetwm.ui.chatActivity
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -13,14 +13,15 @@ import com.akshay.meetwm.respository.ChatRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ChatViewModel(application: Application) : AndroidViewModel(application) {
+class ChatViewModel(application: Application, uid: String) : AndroidViewModel(application) {
 
     private val repo : ChatRepository
     val allChatMessages : LiveData<List<ChatAndMessages>>
 
     init {
         val dao = ContactDatabase.getDatabase(application).getContactDao()
-        repo = ChatRepository(dao)
+
+        repo = ChatRepository(dao, uid)
         allChatMessages = repo.allChatMessages
     }
 

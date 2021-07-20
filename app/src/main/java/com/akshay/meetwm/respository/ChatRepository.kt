@@ -7,9 +7,9 @@ import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.Contact
 import com.akshay.meetwm.model.MessageData
 
-class ChatRepository(private var chatDao : ContactDao) {
+class ChatRepository(private var chatDao : ContactDao, private var uid: String) {
 
-    val allChatMessages : LiveData<List<ChatAndMessages>> = chatDao.getAllChat("60b558a04d110e0015eb301b")
+    val allChatMessages : LiveData<List<ChatAndMessages>> = chatDao.getAllChat(uid)
 
     suspend fun insertChat(chatModel: ChatModel){
         chatDao.insertChat(chatModel)
@@ -17,6 +17,18 @@ class ChatRepository(private var chatDao : ContactDao) {
 
     suspend fun insertMessage(messageData: MessageData){
         chatDao.insertMessage(messageData);
+    }
+
+    suspend fun updateReceiveTime(receivedTime : String, messageId: String){
+        chatDao.setReceivedMessageTime(receivedTime, messageId);
+    }
+
+    suspend fun updateSeenTime(seenTime : String, messageId: String){
+        chatDao.setSeenMessageTime(seenTime, messageId);
+    }
+
+    fun getUnseenMessageID(chat_uid: String) : List<MessageData>{
+        return chatDao.getUnseenMessageId(chat_uid, "not_yet");
     }
 
 }

@@ -28,7 +28,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val dao = ContactDatabase.getDatabase(application).getContactDao()
         repo = ContactRepository(dao)
         mainRepo = MainRepository(application.contentResolver)
-        repoMessage = ChatRepository(dao)
+        repoMessage = ChatRepository(dao, "nothing")
 //        allContacts = repo.allContacts
     }
 
@@ -42,5 +42,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insertChat(messageData: MessageData) = viewModelScope.launch(Dispatchers.IO) {
         repoMessage.insertMessage(messageData)
+    }
+
+    fun updateReceivedMessageTime(receivedTime : String, messageId: String) = viewModelScope.launch(Dispatchers.IO){
+        repoMessage.updateReceiveTime(receivedTime, messageId)
+    }
+
+    fun updateSeenMessageTime(seenTime : String, messageId: String) = viewModelScope.launch(Dispatchers.IO){
+        repoMessage.updateSeenTime(seenTime, messageId)
+    }
+
+    fun getUnseenMessageId(chat_uid: String) : List<MessageData>{
+        return repoMessage.getUnseenMessageID(chat_uid)
     }
 }

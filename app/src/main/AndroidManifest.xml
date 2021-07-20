@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:name=".socket.SocketInstance"
         android:theme="@style/Theme.MeetWM">
-        <activity android:name=".ui.ChatActivity"/>
+        <activity android:name=".ui.chatActivity.ChatActivity"/>
         <activity android:name=".ui.RegisterUser.RegisterUser" />
         <activity android:name=".ui.contact.ContactActivity" />
         <activity android:name=".ui.signInActivity.SignInActivity" />
