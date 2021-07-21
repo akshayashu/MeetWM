@@ -8,8 +8,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.contentValuesOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.MessageData
@@ -31,6 +34,10 @@ class ChatActivity : AppCompatActivity() {
 
     lateinit var viewModel: ChatViewModel
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -40,21 +47,29 @@ class ChatActivity : AppCompatActivity() {
         myUID = intent.getStringExtra("myUID")!!
         chatNumber = intent.getStringExtra("chatNumber")!!
 
-        val textview = findViewById<TextView>(R.id.showText)
+
+        // views
         val editText = findViewById<TextView>(R.id.msgEditText)
+        val recyclerView = findViewById<RecyclerView>(R.id.chatRecyclerView)
+        val adapter = ChatAdapter(this)
+
+        //recyclerView
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.stackFromEnd = true
+        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.adapter = adapter
 
         try {
             val socketInstance = application as SocketInstance
             mSocket = socketInstance.getSocketInstance()
 
-//            mSocket.on(Socket.EVENT_CONNECT, onConnect)
-//            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
-//            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
-
             mSocket.emit("join", myUID)
         }catch (e : Exception){
             Log.d("SOCKET EXCEPTION", e.localizedMessage)
         }
+        val time = System.currentTimeMillis().toString()
+        val seenMessage = SeenMessage(chatUID, myUID, "random id", time);
+        mSocket.emit("seenMessage", Gson().toJson(seenMessage))
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
             mMessageReceiver,
@@ -67,6 +82,7 @@ class ChatActivity : AppCompatActivity() {
         viewModel.allChatMessages.observe(this, { list ->
             list?.let {
                 if(list.isNotEmpty())
+                    adapter.update(list)
                     Log.d("List of messages", list.toString())
             }
 
@@ -106,13 +122,6 @@ class ChatActivity : AppCompatActivity() {
             }
         }
     }
-
-    private val onConnect =
-        Emitter.Listener { Log.d("Tag-Socket", "Socket Connected!") }
-
-    private val onConnectError = Emitter.Listener { Log.d("Tag-Socket", "Socket ERROR !")}
-    private val onConnectTimeout = Emitter.Listener { runOnUiThread { Log.d("Tag-Socket", "Socket Timeout !") } }
-    private val onDisconnect = Emitter.Listener { runOnUiThread {Log.d("Tag-Socket", "Socket Disconnected!") } }
 
     override fun onDestroy() {
         super.onDestroy()

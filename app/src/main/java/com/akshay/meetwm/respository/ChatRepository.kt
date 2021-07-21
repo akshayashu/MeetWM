@@ -20,11 +20,11 @@ class ChatRepository(private var chatDao : ContactDao, private var uid: String) 
     }
 
     suspend fun updateReceiveTime(receivedTime : String, messageId: String){
-        chatDao.setReceivedMessageTime(receivedTime, messageId);
+        chatDao.setReceivedMessageTime(receivedTime, messageId, "received");
     }
 
     suspend fun updateSeenTime(seenTime : String, messageId: String){
-        chatDao.setSeenMessageTime(seenTime, messageId);
+        chatDao.setSeenMessageTime(seenTime, messageId, "seen");
     }
 
     fun getUnseenMessageID(chat_uid: String) : List<MessageData>{

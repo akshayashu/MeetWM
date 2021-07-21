@@ -20,12 +20,12 @@ interface ContactDao {
     suspend fun insertMessage(message: MessageData)
 
     @Transaction
-    @Query("Update MessageData Set received_timestamp = :receivedTime where id = :messageId")
-    suspend fun setReceivedMessageTime(receivedTime : String, messageId: String)
+    @Query("Update MessageData Set received_timestamp = :receivedTime, status = :status where id = :messageId")
+    suspend fun setReceivedMessageTime(receivedTime : String, messageId: String, status: String)
 
     @Transaction
-    @Query("Update MessageData Set read_timestamp = :seenTime where id = :messageId")
-    suspend fun setSeenMessageTime(seenTime : String, messageId: String)
+    @Query("Update MessageData Set read_timestamp = :seenTime, status = :status where id = :messageId")
+    suspend fun setSeenMessageTime(seenTime : String, messageId: String, status: String)
 
     @Transaction
     @Query("Select * from MessageData where chat_uid = :chat_uid and read_timestamp = :time")

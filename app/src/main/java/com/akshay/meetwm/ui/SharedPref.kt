@@ -22,7 +22,7 @@ class SharedPref(context : Context) {
 
     fun setUserID(id : String){
         editor.putString(userId, id)
-        editor.apply()
+        editor.commit()
     }
 
     fun getUserName() : String?{
@@ -31,7 +31,7 @@ class SharedPref(context : Context) {
 
     fun setUserName(name : String){
         editor.putString(userName, name)
-        editor.apply()
+        editor.commit()
     }
 
     fun getUserNumber() : String?{
@@ -40,7 +40,7 @@ class SharedPref(context : Context) {
 
     fun setUserNumber(name : String){
         editor.putString(userNumber, name)
-        editor.apply()
+        editor.commit()
     }
     fun getUserImageBitmap() : String?{
         return preferences.getString(userImageBitmap, "name")
@@ -48,7 +48,7 @@ class SharedPref(context : Context) {
 
     fun setUserImageBitmap(name : String){
         editor.putString(userImageBitmap, name)
-        editor.apply()
+        editor.commit()
     }
     fun getUserStatus() : String?{
         return preferences.getString(userStatus, "name")
@@ -56,7 +56,7 @@ class SharedPref(context : Context) {
 
     fun setUserStatus(name : String){
         editor.putString(userStatus, name)
-        editor.apply()
+        editor.commit()
     }
 
     fun getUserUnseenMsg(): String? {
@@ -65,7 +65,7 @@ class SharedPref(context : Context) {
 
     fun setUserUnseenMsg(name : String){
         editor.putString(userUnseenMsg, name)
-        editor.apply()
+        editor.commit()
     }
 
 }
