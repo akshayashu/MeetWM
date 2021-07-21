@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.ChatAndMessages
 import com.akshay.meetwm.ui.SharedPref
+import android.text.format.DateFormat
+import android.widget.ImageView
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
@@ -30,7 +34,16 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
         val cur = messageList.first().messages[position]
 
         holder.mainMessage.text = cur.data
-        holder.messageTime.text = "${cur.send_timestamp}, ${cur.status}"
+        val time = getTimeFormat(context, cur.send_timestamp.toLong())
+        holder.messageTime.text = "$time"
+
+        if(cur.status == "sent"){
+            holder.messageStatus.setImageResource(R.drawable.sent_message_icon)
+        }else if(cur.status == "received") {
+            holder.messageStatus.setImageResource(R.drawable.received_message_icon)
+        }else if(cur.status == "seen") {
+            holder.messageStatus.setImageResource(R.drawable.seen_message_icon)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -42,7 +55,8 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val mainMessage = itemView.findViewById<TextView>(R.id.messageTextView)
-        val messageTime = itemView.findViewById<TextView>(R.id.timeTextview1);
+        val messageTime = itemView.findViewById<TextView>(R.id.messageTime)
+        val messageStatus = itemView.findViewById<ImageView>(R.id.messageStatus)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -60,4 +74,26 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
 
         notifyDataSetChanged()
     }
+
+    fun getTimeFormat(context: Context, timeStamp: Long) : String{
+        val smsTime = Calendar.getInstance()
+        smsTime.timeInMillis = timeStamp
+
+        val curTime = Calendar.getInstance()
+
+        val timeFormatString = "h:mm aa"
+        val dateTimeFormatString = "EEEE, MMMM d, h:mm aa"
+        val HOURS : Long = 60 * 60 * 60
+
+        if(curTime.get(Calendar.DATE) == smsTime.get(Calendar.DATE)){
+            return "Today " + DateFormat.format(timeFormatString, smsTime)
+        } else if (curTime.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1  ){
+            return "Yesterday " + DateFormat.format(timeFormatString, smsTime);
+        } else if (curTime.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
+            return DateFormat.format(dateTimeFormatString, smsTime).toString();
+        } else {
+            return DateFormat.format("MMMM dd yyyy, h:mm aa", smsTime).toString();
+        }
+    }
+
 }

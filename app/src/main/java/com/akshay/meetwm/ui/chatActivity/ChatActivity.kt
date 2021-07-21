@@ -83,7 +83,7 @@ class ChatActivity : AppCompatActivity() {
             list?.let {
                 if(list.isNotEmpty())
                     adapter.update(list)
-                    Log.d("List of messages", list.toString())
+                    Log.d("List of messages", list.size.toString())
             }
 
         })
