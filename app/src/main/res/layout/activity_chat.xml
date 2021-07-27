@@ -55,6 +55,7 @@
             android:layout_weight="1"/>
 
         <ImageView
+            android:id="@+id/callBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"

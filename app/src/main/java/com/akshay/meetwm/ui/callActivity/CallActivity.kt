@@ -28,7 +28,6 @@ class CallActivity : AppCompatActivity() {
     var isPeerConnected = false
 
     private val db = FirebaseFirestore.getInstance()
-    private val userCollection = db.collection("users")
 
     var firebaseRef = Firebase.database.getReference("users")
     var isAudio = true
@@ -39,6 +38,7 @@ class CallActivity : AppCompatActivity() {
         setContentView(R.layout.activity_call)
 
         userName = intent.getStringExtra("username")!!
+        friendUserName = intent.getStringExtra("friendUserName")!!
         Log.d("USERNAME", userName)
 
         callBtn.setOnClickListener {
