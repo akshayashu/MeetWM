@@ -49,15 +49,10 @@ class CallTestActivity : AppCompatActivity() {
 
         if(callType == "outgoing"){ // come here because I want to call somebody
             sendCallRequest()
-            callControlLayout1.visibility = View.VISIBLE
+            setOutgoingLayout()
         }else{  // come here because someone has called me
-
-        }
-
-        callBtn.setOnClickListener {
-//            friendUserName = friendNameEdit1.text.toString().trim()
-            Log.d("Fiend username", friendUserName);
-
+            setIncomingLayout()
+            hideOutgoingLayout()
         }
 
         audioToggleBtn.setOnClickListener {
@@ -80,7 +75,10 @@ class CallTestActivity : AppCompatActivity() {
                     R.drawable.ic_baseline_videocam_off_24
             )
         }
-
+        endCallBtn.setOnClickListener {
+            firebaseRef.child(userName).child("callStatus").setValue("ended")
+            finish()
+        }
 
         // waiting for friend's response on my call
         firebaseRef.child(friendUserName)
@@ -88,9 +86,8 @@ class CallTestActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.value.toString() == "accepted"){
                         listenCall()
-                        callLayout.visibility = View.GONE
-                        inputLayout1.visibility = View.GONE
-                        callControlLayout1.visibility = View.VISIBLE
+                        setOutgoingLayout()
+                        hideIncomingLayout()
                     }else if (snapshot.value.toString() == "rejected"){
                         Toast.makeText(this@CallTestActivity, "He/She is busy", Toast.LENGTH_SHORT).show()
                         firebaseRef.child(userName).child("isAvailable").setValue(true)
@@ -134,9 +131,8 @@ class CallTestActivity : AppCompatActivity() {
             firebaseRef.child(userName).child("isAvailable").setValue(false)
             firebaseRef.child(userName).child("callStatus").setValue("accepted")
 
-            callLayout.visibility = View.GONE
-            inputLayout1.visibility = View.GONE
-            callControlLayout1.visibility = View.VISIBLE
+            hideIncomingLayout()
+            setOutgoingLayout()
         }
 
         rejectCall.setOnClickListener {
@@ -215,6 +211,24 @@ class CallTestActivity : AppCompatActivity() {
     private fun getUID() : String{
         return UUID.randomUUID().toString()
     }
+
+    private fun setIncomingLayout(){
+        callLayout.visibility = View.VISIBLE
+        actionLayout.visibility = View.VISIBLE
+    }
+    private fun hideIncomingLayout(){
+        callLayout.visibility = View.GONE
+        actionLayout.visibility = View.GONE
+    }
+
+    private fun setOutgoingLayout(){
+        callControlLayout1.visibility = View.VISIBLE
+    }
+    private fun hideOutgoingLayout(){
+        callControlLayout1.visibility = View.GONE
+    }
+
+
 
     fun onPeerConnect() {
         isPeerConnected = true
