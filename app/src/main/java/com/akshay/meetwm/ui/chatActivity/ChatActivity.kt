@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import com.akshay.meetwm.model.MessageData
 import com.akshay.meetwm.model.SeenMessage
 import com.akshay.meetwm.socket.SocketInstance
 import com.akshay.meetwm.ui.callActivity.CallActivity
+import com.akshay.meetwm.ui.callActivity.CallTestActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -55,33 +57,20 @@ class ChatActivity : AppCompatActivity() {
         myUID = intent.getStringExtra("myUID")!!
         chatNumber = intent.getStringExtra("chatNumber")!!
 
-        callBtn.setOnClickListener {
-            val intent = Intent(this, CallActivity::class.java)
-            intent.putExtra("friendUserName", chatUID)
-            intent.putExtra("username", myUID)
-            startActivity(intent)
-        }
 
-        firebaseRef.child(chatUID).child("connId").addValueEventListener(object :
-            ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.value == null)
-                    return
-                val intent = Intent(applicationContext, CallActivity::class.java)
-                intent.putExtra("friendUserName", chatUID)
-                intent.putExtra("username", myUID)
-                startActivity(intent)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
         // views
         val editText = findViewById<TextView>(R.id.msgEditText)
         val recyclerView = findViewById<RecyclerView>(R.id.chatRecyclerView)
         val adapter = ChatAdapter(this)
+        val callBtn = findViewById<ImageView>(R.id.callBtn)
+
+        callBtn.setOnClickListener {
+            val intent = Intent(this, CallTestActivity::class.java)
+            intent.putExtra("username", myUID)
+            intent.putExtra("friendUserName", chatUID)
+            intent.putExtra("callType", "outgoing")
+            startActivity(intent)
+        }
 
         //recyclerView
         val linearLayoutManager = LinearLayoutManager(this)
@@ -158,21 +147,5 @@ class ChatActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver)
 //        mSocket.emit("disconnect", senderUID)
         Log.d("SOCKET", "Destroyed")
-    }
-
-    private fun sendCallRequest() {
-        firebaseRef.child(chatUID).child("incoming").setValue(myUID)
-        firebaseRef.child(chatUID).child("isAvailable").addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.value.toString() == "true"){
-
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
     }
 }

@@ -19,6 +19,7 @@ import com.akshay.meetwm.socket.SocketInstance
 import com.akshay.meetwm.ui.SharedPref
 import com.akshay.meetwm.ui.contact.ContactActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import com.google.gson.Gson
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private var list = ArrayList<Contact>()
+
+    var firebaseRef = Firebase.database.getReference("users")
 
     override fun onStart() {
         super.onStart()
@@ -153,6 +156,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun showPref() {
         pref = SharedPref(this)
+
+        //setting default values for calling
+        firebaseRef.child(pref.getUserID().toString()).child("incoming").setValue("")
+        firebaseRef.child(pref.getUserID().toString()).child("callStatus").setValue("")
+        firebaseRef.child(pref.getUserID().toString()).child("isAvailable").setValue(true)
+        firebaseRef.child(pref.getUserID().toString()).child("connId").setValue("")
+
         Log.d("Username", pref.getUserName().toString())
         Log.d("UserPhoto", pref.getUserImageBitmap().toString())
         Log.d("UserStatus", pref.getUserStatus().toString())
