@@ -17,8 +17,12 @@ import com.akshay.meetwm.model.ReceivedMessage
 import com.akshay.meetwm.model.SeenMessage
 import com.akshay.meetwm.socket.SocketInstance
 import com.akshay.meetwm.ui.SharedPref
+import com.akshay.meetwm.ui.callActivity.CallTestActivity
 import com.akshay.meetwm.ui.contact.ContactActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
@@ -145,6 +149,27 @@ class MainActivity : AppCompatActivity() {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             }
         }
+
+        //section for incoming calls
+        firebaseRef.child(pref.getUserID().toString())
+            .child("incoming").addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.value.toString().trim() == ""){
+                        return
+                    }else {
+                        val intent = Intent(this@MainActivity, CallTestActivity::class.java)
+                        intent.putExtra("username", pref.getUserID().toString())
+                        intent.putExtra("friendUserName", snapshot.value.toString())
+                        intent.putExtra("callType", "incoming")
+                        Toast.makeText(this@MainActivity, "Incoming call", Toast.LENGTH_SHORT).show()
+                        startActivity(intent)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
     }
 
     private fun updateList() {

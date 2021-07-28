@@ -167,32 +167,13 @@ class CallTestActivity : AppCompatActivity() {
             Toast.makeText(this, "You're not connected", Toast.LENGTH_SHORT).show()
             return
         }
-        firebaseRef.child(friendUserName)
-            .child("isAvailable")
-            .addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.value.toString() == "true"){
-                    setCanCallUser(true)
-                }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
+        firebaseRef.child(friendUserName).child("incoming").setValue(userName)
+        firebaseRef.child(friendUserName).child("callStatus").setValue("waiting")
 
-            }
-
-        })
-        if(canCall){
-            firebaseRef.child(friendUserName).child("incoming").setValue(userName)
-            firebaseRef.child(friendUserName).child("callStatus").setValue("waiting")
-
-            firebaseRef.child(userName).child("isAvailable").setValue(false)
-        }
+        firebaseRef.child(userName).child("isAvailable").setValue(false)
 
 
-    }
-
-    private fun setCanCallUser(b : Boolean){
-        canCall = b
     }
 
     private fun setWebView(){

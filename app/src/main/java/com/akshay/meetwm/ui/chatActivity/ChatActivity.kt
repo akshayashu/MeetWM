@@ -65,11 +65,31 @@ class ChatActivity : AppCompatActivity() {
         val callBtn = findViewById<ImageView>(R.id.callBtn)
 
         callBtn.setOnClickListener {
+
             val intent = Intent(this, CallTestActivity::class.java)
             intent.putExtra("username", myUID)
             intent.putExtra("friendUserName", chatUID)
             intent.putExtra("callType", "outgoing")
-            startActivity(intent)
+
+            firebaseRef.child(chatUID)
+                .child("isAvailable")
+                .addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if(snapshot.value.toString() == "true"){
+                            startActivity(intent)
+                            Toast.makeText(this@ChatActivity, "Calling", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(this@ChatActivity, "He/She is busy", Toast.LENGTH_SHORT).show()
+                            return
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+
         }
 
         //recyclerView
