@@ -65,7 +65,7 @@
             android:fontFamily="@font/allerta"
             android:padding="10dp"
             android:text="@string/contacts"
-            android:textColor="@color/light_blue"
+            android:textColor="@color/light_green"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>

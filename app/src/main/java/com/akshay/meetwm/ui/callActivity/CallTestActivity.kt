@@ -1,5 +1,7 @@
 package com.akshay.meetwm.ui.callActivity
 
+import android.annotation.TargetApi
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -175,7 +177,11 @@ class CallTestActivity : AppCompatActivity() {
     private fun setWebView(){
         webView.webChromeClient = object : WebChromeClient(){
             override fun onPermissionRequest(request: PermissionRequest?) {
-                request?.grant(request.resources)
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    request?.grant(request.resources)
+                }else{
+                    Toast.makeText(this@CallTestActivity, "PERMISSION", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

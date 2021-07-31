@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_color">#364958</color>
-    <color name="secondary_color">#3b6064</color>
-    <color name="blue">#55828b</color>
-    <color name="light_blue">#87bba2</color>
-    <color name="sky_blue">#c9e4ca</color>
+    <color name="primary_color">#216DED</color>
+    <color name="secondary_color">#23AAF7</color>
+    <color name="blue">#2ACDE0</color>
+    <color name="light_green">#23F7D2</color>
+    <color name="green">#21ED90</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

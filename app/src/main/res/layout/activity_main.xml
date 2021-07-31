@@ -25,8 +25,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/meetwm"
-                android:textColor="@color/light_blue"
-                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/allerta"/>
         </androidx.appcompat.widget.Toolbar>
@@ -36,11 +36,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primary_color"
-            app:tabIndicatorColor="@color/light_blue"
-            app:tabSelectedTextColor="@color/light_blue"
+            app:tabIndicatorColor="@color/green"
+            app:tabSelectedTextColor="@color/light_green"
             app:tabTextColor="@color/white"
             app:tabIndicatorHeight="2dp"
-            app:tabRippleColor="@color/sky_blue"/>
+            app:tabRippleColor="@color/light_green"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

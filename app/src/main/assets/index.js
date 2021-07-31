@@ -7,37 +7,21 @@ remoteVideo.style.opacity = 0
 localVideo.onplaying = () => { localVideo.style.opacity = 1 }
 remoteVideo.onplaying = () => { remoteVideo.style.opacity = 1 }
 
-let localStream
-
-navigator.getUserMedia({
+var constraints = {
     video: true,
     audio: true
-}, (stream) => {
+};
+
+var localStream
+
+var listOfCamera = []
+
+navigator.getUserMedia(constraints, (stream) => {
     localVideo.srcObject = stream
     localStream = stream
 })
 
-let devices = navigator.mediaDevices.enumerateDevices()
-console.log(devices);
-// 192.168.0.4
-// https://meet-wm.herokuapp.com
-
-//declaring web socket from client-side
-// const ws = new io('ws://192.168.0.4:9000/')
-
-// ws.onopen = function () {
-//     console.log("WebSocket client is connected.");
-// }
-
-// function sendMessage(msg) {
-//     ws.send(msg)
-// }
-
-// ws.onmessage = function(msg){
-//     console.log("Received : " + msg.data)
-// }
-
-//per
+//peer
 let peer
 function init(userId) {
 
@@ -67,22 +51,6 @@ function listen() {
                 localVideo.className = "secondary-video"
             })
         })
-        // navigator.getUserMedia({
-        //     video: true,
-        //     audio: true
-        // }, (stream) => {
-        //     localVideo.srcObject = stream
-        //     localStream = stream
-
-        //     call.answer(stream)
-        //     call.on('stream', (remoteStream) => {
-        //         remoteVideo.srcObject = remoteStream
-
-        //         remoteVideo.className = "primary-video"
-        //         localVideo.className = "secondary-video"
-        //     })
-        // })
-    // })
 }
 
 function startCall(otherUserId) {
@@ -105,7 +73,6 @@ function startCall(otherUserId) {
     })
 
 }
-
 function toggleVideo(b) {
     if(b == "true"){
         localStream.getVideoTracks()[0].enabled = true
@@ -114,6 +81,24 @@ function toggleVideo(b) {
     }
 }
 
+function switchCamera(i){
+    navigator.mediaDevices.enumerateDevices().then(function(devices) {
+    listOfCamera = [];
+      devices.forEach(function(device) {
+        'videoinput' === device.kind && listOfCamera.push(device.deviceId);
+      });
+      console.log(listOfCamera[i]);
+      // On my devices:
+      // - cameras[0] - front camera;
+      // - cameras[1] - back camera;
+      constraints = {video: {deviceId: {exact: listOfCamera[i]}}};
+      navigator.getUserMedia(constraints, (stream) => {
+        // Do something with stream.
+        localVideo.srcObject = stream
+        localStream = stream
+      });
+    });
+}
 
 function toggleAudio(b) {
     if(b == "true"){
@@ -122,5 +107,3 @@ function toggleAudio(b) {
         localStream.getAudioTracks()[0].enabled = false
     }
 }
-
-// navigator.MediaDevices.emulatedDevices(devices -> {console.log(devices.id})
