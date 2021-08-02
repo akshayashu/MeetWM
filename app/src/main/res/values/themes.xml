@@ -20,4 +20,18 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+    <style name="myMessageStyle">
+        <item name="neumorph_cornerFamily">rounded</item>
+
+        <item name="neumorph_cornerSizeTopLeft">14dp</item>
+        <item name="neumorph_cornerSizeBottomLeft">14dp</item>
+        <item name="neumorph_cornerSizeBottomRight">14dp</item>
+    </style>
+    <style name="otherMessageStyle">
+        <item name="neumorph_cornerFamily">rounded</item>
+
+        <item name="neumorph_cornerSizeTopRight">14dp</item>
+        <item name="neumorph_cornerSizeBottomLeft">14dp</item>
+        <item name="neumorph_cornerSizeBottomRight">14dp</item>
+    </style>
 </resources>

@@ -5,22 +5,23 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.contentValuesOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
+import com.akshay.meetwm.model.ChatAndMessages
 import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.MessageData
 import com.akshay.meetwm.model.SeenMessage
 import com.akshay.meetwm.socket.SocketInstance
-import com.akshay.meetwm.ui.callActivity.CallActivity
 import com.akshay.meetwm.ui.callActivity.CallTestActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,8 +30,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import io.socket.client.Socket
-import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_chat.*
+import java.util.*
 
 
 class ChatActivity : AppCompatActivity() {
@@ -40,6 +41,14 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatUID : String
     private lateinit var myUID : String
     private lateinit var chatNumber: String
+    private var listOfMessage = ArrayList<ChatAndMessages>()
+
+    lateinit var editText : TextView
+    lateinit var recyclerView : RecyclerView
+    lateinit var adapter : ChatAdapter
+    lateinit var callBtn: ImageView
+    lateinit var dateTextView : TextView
+    lateinit var linearLayoutManager : LinearLayoutManager
 
     lateinit var viewModel: ChatViewModel
     var firebaseRef = Firebase.database.getReference("users")
@@ -59,10 +68,11 @@ class ChatActivity : AppCompatActivity() {
 
 
         // views
-        val editText = findViewById<TextView>(R.id.msgEditText)
-        val recyclerView = findViewById<RecyclerView>(R.id.chatRecyclerView)
-        val adapter = ChatAdapter(this)
-        val callBtn = findViewById<ImageView>(R.id.callBtn)
+        editText = findViewById<TextView>(R.id.msgEditText)
+        recyclerView = findViewById<RecyclerView>(R.id.chatRecyclerView)
+        adapter = ChatAdapter(this)
+        callBtn = findViewById<ImageView>(R.id.callBtn)
+        dateTextView = findViewById<TextView>(R.id.dateText)
 
         callBtn.setOnClickListener {
 
@@ -93,10 +103,12 @@ class ChatActivity : AppCompatActivity() {
         }
 
         //recyclerView
-        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.stackFromEnd = true
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
+
+        recyclerView.addOnScrollListener(listener)
 
         try {
             val socketInstance = application as SocketInstance
@@ -120,9 +132,11 @@ class ChatActivity : AppCompatActivity() {
 
         viewModel.allChatMessages.observe(this, { list ->
             list?.let {
-                if(list.isNotEmpty())
+                if(list.isNotEmpty()) {
                     adapter.update(list)
+                    listOfMessage.addAll(list)
                     Log.d("List of messages", list.size.toString())
+                }
             }
 
         })
@@ -164,8 +178,41 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        recyclerView.clearOnScrollListeners()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver)
 //        mSocket.emit("disconnect", senderUID)
         Log.d("SOCKET", "Destroyed")
+    }
+
+    private val listener = object : RecyclerView.OnScrollListener(){
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (listOfMessage.isNotEmpty()){
+                val cur = listOfMessage.first().messages
+                val position = linearLayoutManager.findFirstVisibleItemPosition()
+                Log.d("time of message", position.toString())
+                val time = cur[position].send_timestamp
+                dateTextView.text = getTimeFormat(applicationContext, time.toLong())
+            }
+        }
+    }
+
+    fun getTimeFormat(context: Context, timeStamp: Long) : String{
+        val smsTime = Calendar.getInstance()
+        smsTime.timeInMillis = timeStamp
+
+        val curTime = Calendar.getInstance()
+
+        val dateTimeFormatString = "EEEE, MMMM d"
+
+        if(curTime.get(Calendar.DATE) == smsTime.get(Calendar.DATE)){
+            return "Today"
+        } else if (curTime.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1  ){
+            return "Yesterday"
+        } else if (curTime.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
+            return DateFormat.format(dateTimeFormatString, smsTime).toString();
+        } else {
+            return DateFormat.format("MMMM dd yyyy, h:mm aa", smsTime).toString();
+        }
     }
 }

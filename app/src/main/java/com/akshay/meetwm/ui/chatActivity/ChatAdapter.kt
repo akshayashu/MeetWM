@@ -30,12 +30,14 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
         }
     }
 
+
     override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
         val cur = messageList.first().messages[position]
 
         holder.mainMessage.text = cur.data
         val time = getTimeFormat(context, cur.send_timestamp.toLong())
-        holder.messageTime.text = "$time"
+        val timeOnly = time.takeLast(8)
+        holder.messageTime.text = "$timeOnly"
 
         if(cur.status == "sent"){
             holder.messageStatus.setImageResource(R.drawable.sent_message_icon)

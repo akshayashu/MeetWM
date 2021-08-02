@@ -7,11 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.akshay.meetwm.R
-import com.akshay.meetwm.ui.callActivity.CallActivity
-import com.akshay.meetwm.ui.main.MainActivity
 import com.akshay.meetwm.ui.signInActivity.SignInActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_chat.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,12 +39,6 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        login.setOnClickListener {
-            val username = userNameEdit.text.toString().trim()
-            val intent = Intent(this.activity, CallActivity::class.java)
-            intent.putExtra("username", username)
-            startActivity(intent)
-        }
         signoutBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this.context, SignInActivity::class.java))

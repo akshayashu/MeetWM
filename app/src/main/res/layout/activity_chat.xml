@@ -10,7 +10,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/secondary_color"
+        android:background="@color/primary_color"
         android:orientation="horizontal"
         android:padding="7dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,15 +22,12 @@
             android:layout_height="32dp"
             android:src="@drawable/blank_person"
             android:layout_margin="5dp"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="20dp"
             android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
@@ -43,10 +40,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="start"
                 android:text="Online"
                 android:textSize="12sp"
-                android:textColor="#090909"
+                android:textColor="@color/green"
                 android:textStyle="bold"/>
         </LinearLayout>
         <View
@@ -55,20 +52,34 @@
             android:layout_weight="1"/>
 
         <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_baseline_call_24"/>
+
+        <ImageView
             android:id="@+id/callBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_baseline_call_black_24"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:src="@drawable/ic_baseline_videocam_black_24"/>
+            android:src="@drawable/ic_baseline_videocam_24"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_background"
+        android:padding="6dp"
+        android:text="Today"
+        android:textSize="10sp"
+        android:layout_margin="5dp"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"

@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@color/primary_color"
+            android:background="#ECE9FE"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary">
 
@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/meetwm"
-                android:textColor="@color/white"
+                android:textColor="@color/secondary_color"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/allerta"/>
@@ -35,10 +35,10 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary_color"
-            app:tabIndicatorColor="@color/green"
-            app:tabSelectedTextColor="@color/light_green"
-            app:tabTextColor="@color/white"
+            android:background="#ECE9FE"
+            app:tabIndicatorColor="@color/light_green"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextColor="@color/primary_color"
             app:tabIndicatorHeight="2dp"
             app:tabRippleColor="@color/light_green"/>
 
