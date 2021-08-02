@@ -90,7 +90,7 @@ class CallTestActivity : AppCompatActivity() {
                         listenCall()
                         setOutgoingLayout()
                         hideIncomingLayout()
-                        webView.alpha = 0.0F
+                        webView.alpha = 1.0F
                     }else if (snapshot.value.toString() == "rejected"){
                         Toast.makeText(this@CallTestActivity, "He/She is busy", Toast.LENGTH_SHORT).show()
                         firebaseRef.child(userName).child("isAvailable").setValue(true)

@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/call_layout_background"
         android:gravity="center"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:padding="10dp"
         android:orientation="horizontal">
@@ -94,7 +95,6 @@
             android:src="@drawable/end_call_icon"
             app:civ_circle_background_color="#99000000"
             app:civ_border_color="@color/white"
-            app:civ_border_width="0.5dp"
             android:layout_margin="15dp"/>
         <ImageView
             android:id="@+id/audioToggleBtn"

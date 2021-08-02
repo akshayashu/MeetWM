@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/blue_background"
         android:padding="6dp"
-        android:text="Today"
+        android:text="@string/today"
         android:textSize="10sp"
         android:layout_margin="5dp"
         android:elevation="10dp"

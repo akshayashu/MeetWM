@@ -136,6 +136,7 @@ class ChatActivity : AppCompatActivity() {
                     adapter.update(list)
                     listOfMessage.addAll(list)
                     Log.d("List of messages", list.size.toString())
+                    recyclerView.smoothScrollToPosition(list.first().messages.size-1)
                 }
             }
 
