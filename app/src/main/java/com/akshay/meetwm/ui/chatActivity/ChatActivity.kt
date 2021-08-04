@@ -13,7 +13,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
@@ -31,7 +35,16 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import io.socket.client.Socket
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
+import retrofit2.http.OPTIONS
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ChatActivity : AppCompatActivity() {
@@ -41,7 +54,8 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatUID : String
     private lateinit var myUID : String
     private lateinit var chatNumber: String
-    private var listOfMessage = ArrayList<ChatAndMessages>()
+    private var listOfMessage = ArrayList<MessageData>()
+    private var messages = ArrayList<PagingData<MessageData>>()
 
     lateinit var editText : TextView
     lateinit var recyclerView : RecyclerView
@@ -57,6 +71,7 @@ class ChatActivity : AppCompatActivity() {
         super.onStart()
     }
 
+    @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -130,17 +145,39 @@ class ChatActivity : AppCompatActivity() {
         val chatViewModelFactory = ChatViewModelFactory(application, chatUID);
         viewModel = ViewModelProvider(this, chatViewModelFactory).get(ChatViewModel::class.java)
 
-        viewModel.allChatMessages.observe(this, { list ->
-            list?.let {
-                if(list.isNotEmpty()) {
-                    adapter.update(list)
-                    listOfMessage.addAll(list)
-                    Log.d("List of messages", list.size.toString())
-                    recyclerView.smoothScrollToPosition(list.first().messages.size-1)
-                }
+        // observing only list of messages
+        lifecycleScope.launch {
+            viewModel.allMessages.collectLatest { list ->
+                Log.d("LIST of Messages", list.toString())
+                adapter.submitData(list)
+                messages.addAll(listOf(list))
             }
+        }
 
-        })
+
+
+
+//        (this, {list ->
+//            list?.let {
+//                if(list.isNotEmpty()){
+//                    adapter.update(list)
+//                    listOfMessage.addAll(list)
+//                }
+//            }
+//        })
+
+        // observing the whole chatAndMessages data
+//        viewModel.allChatMessages.observe(this, { list ->
+//            list?.let {
+//                if(list.isNotEmpty()) {
+//                    adapter.update(list)
+//                    listOfMessage.addAll(list)
+//                    Log.d("List of messages", list.size.toString())
+//                    recyclerView.smoothScrollToPosition(list.first().messages.size-1)
+//                }
+//            }
+//
+//        })
 
 
         sendBtn.setOnClickListener {
@@ -189,16 +226,15 @@ class ChatActivity : AppCompatActivity() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             if (listOfMessage.isNotEmpty()){
-                val cur = listOfMessage.first().messages
                 val position = linearLayoutManager.findFirstVisibleItemPosition()
                 Log.d("time of message", position.toString())
-                val time = cur[position].send_timestamp
-                dateTextView.text = getTimeFormat(applicationContext, time.toLong())
+                val time = listOfMessage[position].send_timestamp
+                dateTextView.text = getTimeFormat(time.toLong())
             }
         }
     }
 
-    fun getTimeFormat(context: Context, timeStamp: Long) : String{
+    fun getTimeFormat(timeStamp: Long) : String{
         val smsTime = Calendar.getInstance()
         smsTime.timeInMillis = timeStamp
 

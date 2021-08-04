@@ -19,19 +19,21 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo : ContactRepository
-    private val repoMessage : ChatRepository
+    private val chatRepo : ChatRepository
 //    val allContacts : LiveData<List<Contact>>
     private val mainRepo : MainRepository
     val list = MutableLiveData<ArrayList<Contact>>()
 
     init {
         val dao = ContactDatabase.getDatabase(application).getContactDao()
+        val chatDao = ContactDatabase.getDatabase(application).getChatDao()
+
         repo = ContactRepository(dao)
         mainRepo = MainRepository(application.contentResolver)
-        repoMessage = ChatRepository(dao, "nothing")
-//        allContacts = repo.allContacts
+        chatRepo = ChatRepository(chatDao, "nothing")
     }
 
+    //for contact sections
     fun getContact() = viewModelScope.launch(Dispatchers.IO) {
         list.postValue(mainRepo.loadContacts())
     }
@@ -40,19 +42,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repo.insert(contact)
     }
 
-    fun insertChat(messageData: MessageData) = viewModelScope.launch(Dispatchers.IO) {
-        repoMessage.insertMessage(messageData)
+    //for chat and message sections
+    fun insertMessage(messageData: MessageData) = viewModelScope.launch(Dispatchers.IO) {
+        chatRepo.insertMessage(messageData)
     }
 
     fun updateReceivedMessageTime(receivedTime : String, messageId: String) = viewModelScope.launch(Dispatchers.IO){
-        repoMessage.updateReceiveTime(receivedTime, messageId)
+        chatRepo.updateReceiveTime(receivedTime, messageId)
     }
 
     fun updateSeenMessageTime(seenTime : String, messageId: String) = viewModelScope.launch(Dispatchers.IO){
-        repoMessage.updateSeenTime(seenTime, messageId)
+        chatRepo.updateSeenTime(seenTime, messageId)
     }
 
     fun getUnseenMessageId(chat_uid: String) : List<MessageData>{
-        return repoMessage.getUnseenMessageID(chat_uid)
+        return chatRepo.getUnseenMessageID(chat_uid)
     }
 }

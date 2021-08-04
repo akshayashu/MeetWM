@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 
                 Log.d("SOCKET MESSAGE", data.toString())
                 val messageData = Gson().fromJson(data.toString(), MessageData::class.java)
-                viewModel.insertChat(messageData)
+                viewModel.insertMessage(messageData)
 
                 // emitting the other person that I've received his/her message
                 Log.d("MY IDDDDD", pref.getUserID()!!)

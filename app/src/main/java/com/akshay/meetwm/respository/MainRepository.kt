@@ -81,17 +81,12 @@ class MainRepository(private val contentResolver: ContentResolver) {
         }
 
         try {
-//            val jsonObject = Gson().toJson(numberrrrrr(numberList))
-//            numberList.add("+919911397711")
             val response = RetrofitClient.apiInterface.getRegisteredUser(numberrrrrr(numberList))
             if(response.isSuccessful){
-//
                 setList(response.body()!!)
-//                Log.d("RESPONSE", response.body().toString())
             }
         }catch(e : Exception){
             e.printStackTrace()
-//            Log.d("MAIN REPO EXCEPTION", e.localizedMessage.toString())
         }
 
         return list

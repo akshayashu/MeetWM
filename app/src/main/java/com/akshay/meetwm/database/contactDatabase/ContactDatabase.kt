@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.akshay.meetwm.database.chatDatabase.ChatDao
 import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.Contact
 import com.akshay.meetwm.model.MessageData
@@ -14,6 +15,7 @@ import com.akshay.meetwm.model.MessageData
 abstract class ContactDatabase : RoomDatabase() {
 
     abstract fun getContactDao() : ContactDao
+    abstract fun getChatDao() : ChatDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

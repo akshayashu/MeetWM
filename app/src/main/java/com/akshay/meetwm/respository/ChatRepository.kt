@@ -1,15 +1,17 @@
 package com.akshay.meetwm.respository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
+import com.akshay.meetwm.database.chatDatabase.ChatDao
 import com.akshay.meetwm.database.contactDatabase.ContactDao
 import com.akshay.meetwm.model.ChatAndMessages
 import com.akshay.meetwm.model.ChatModel
-import com.akshay.meetwm.model.Contact
 import com.akshay.meetwm.model.MessageData
 
-class ChatRepository(private var chatDao : ContactDao, private var uid: String) {
+class ChatRepository(private var chatDao: ChatDao, uid: String) {
 
     val allChatMessages : LiveData<List<ChatAndMessages>> = chatDao.getAllChat(uid)
+    val allMessages : PagingSource<Int, MessageData> = chatDao.getMessages(uid)
 
     suspend fun insertChat(chatModel: ChatModel){
         chatDao.insertChat(chatModel)

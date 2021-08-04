@@ -111,6 +111,11 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
 
+    // for Pagination-3.0
+    implementation 'androidx.paging:paging-runtime:3.1.0-alpha03'
+    implementation 'androidx.paging:paging-runtime-ktx:3.1.0-alpha03'
+    implementation 'androidx.paging:paging-common:3.1.0-alpha03'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
