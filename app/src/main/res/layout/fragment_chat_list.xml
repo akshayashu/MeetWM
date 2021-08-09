@@ -3,12 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.chatFragment.ChatFragment">
+    tools:context=".ui.chatListFragment.ChatFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:listitem="@layout/item_chat"
+            android:layout_weight="1"/>
+
         <EditText
             android:id="@+id/userNameEdit"
             android:layout_width="match_parent"
@@ -18,9 +26,9 @@
             android:background="@drawable/round_strip_blue"
             android:layout_margin="10dp"
             android:textSize="16sp"/>
-        
+
         <TextView
-            android:id="@+id/signoutBtn"
+            android:id="@+id/signOutBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Out"
@@ -30,7 +38,5 @@
             android:layout_margin="10dp"
             android:background="@drawable/round_strip_blue"/>
     </LinearLayout>
-
-
 
 </FrameLayout>

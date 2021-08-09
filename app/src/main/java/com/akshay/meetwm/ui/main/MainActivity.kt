@@ -18,6 +18,7 @@ import com.akshay.meetwm.model.SeenMessage
 import com.akshay.meetwm.socket.SocketInstance
 import com.akshay.meetwm.ui.SharedPref
 import com.akshay.meetwm.ui.callActivity.CallTestActivity
+import com.akshay.meetwm.ui.chatListFragment.ChatListViewModel
 import com.akshay.meetwm.ui.contact.ContactActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.DataSnapshot

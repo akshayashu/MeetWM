@@ -10,7 +10,7 @@ import com.akshay.meetwm.model.MessageData
 
 class ChatRepository(private var chatDao: ChatDao, uid: String) {
 
-    val allChatMessages : LiveData<List<ChatAndMessages>> = chatDao.getAllChat(uid)
+    val allChatMessages : LiveData<List<ChatAndMessages>> = chatDao.getChat(uid)
     val allMessages : PagingSource<Int, MessageData> = chatDao.getMessages(uid)
 
     suspend fun insertChat(chatModel: ChatModel){

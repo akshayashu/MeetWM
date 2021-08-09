@@ -1,4 +1,4 @@
-package com.akshay.meetwm.ui.chatFragment
+package com.akshay.meetwm.ui.chatListFragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
+import com.akshay.meetwm.model.ChatAndMessages
+import com.akshay.meetwm.model.Contact
 import com.akshay.meetwm.ui.signInActivity.SignInActivity
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.android.synthetic.main.fragment_chat_list.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +25,9 @@ class ChatFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var viewModel : ChatListViewModel
+    private var list = ArrayList<ChatAndMessages>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +42,27 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return inflater.inflate(R.layout.fragment_chat_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        signoutBtn.setOnClickListener {
+
+        viewModel = ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity?.application!!)).get(ChatListViewModel::class.java)
+
+
+        val adapter = ChatListAdapter(list)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.chatRecyclerView)
+
+        val linearLayoutManager = LinearLayoutManager(this.context)
+        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.adapter = adapter
+
+        viewModel.allChat.observe(viewLifecycleOwner, {
+            adapter.update(it)
+        })
+        signOutBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this.context, SignInActivity::class.java))
             activity?.finish()

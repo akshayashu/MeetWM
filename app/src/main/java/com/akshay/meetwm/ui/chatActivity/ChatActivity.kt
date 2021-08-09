@@ -81,13 +81,19 @@ class ChatActivity : AppCompatActivity() {
         myUID = intent.getStringExtra("myUID")!!
         chatNumber = intent.getStringExtra("chatNumber")!!
 
+        callBtn = findViewById(R.id.callBtn)
+        dateTextView = findViewById(R.id.dateText)
 
+        val itemClicked = object : ChatAdapter.ChatAdapterInterface{
+            override fun onItemClicked(messageTime: String) {
+
+                dateTextView.text = getTimeFormat(messageTime.toLong())
+            }
+        }
         // views
-        editText = findViewById<TextView>(R.id.msgEditText)
-        recyclerView = findViewById<RecyclerView>(R.id.chatRecyclerView)
-        adapter = ChatAdapter(this)
-        callBtn = findViewById<ImageView>(R.id.callBtn)
-        dateTextView = findViewById<TextView>(R.id.dateText)
+        editText = findViewById(R.id.msgEditText)
+        recyclerView = findViewById(R.id.messageRecyclerView)
+        adapter = ChatAdapter(this, itemClicked)
 
         callBtn.setOnClickListener {
 
@@ -150,7 +156,6 @@ class ChatActivity : AppCompatActivity() {
             viewModel.allMessages.collectLatest { list ->
                 Log.d("LIST of Messages", list.toString())
                 adapter.submitData(list)
-                messages.addAll(listOf(list))
             }
         }
 
@@ -230,6 +235,7 @@ class ChatActivity : AppCompatActivity() {
                 Log.d("time of message", position.toString())
                 val time = listOfMessage[position].send_timestamp
                 dateTextView.text = getTimeFormat(time.toLong())
+
             }
         }
     }

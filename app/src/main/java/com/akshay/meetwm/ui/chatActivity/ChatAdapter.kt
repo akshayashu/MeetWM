@@ -18,14 +18,15 @@ import com.akshay.meetwm.model.MessageData
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ChatAdapter(val context: Context) : PagingDataAdapter<MessageData, ChatAdapter.ViewHolder>(
-    DIFF_CALLBACK) {
+class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterInterface) :
+    PagingDataAdapter<MessageData, ChatAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     private var messageList = ArrayList<MessageData>()
     private var MSG_TYP_LEFT = 0
     private var MSG_TYP_Right = 1
 
     companion object{
+        var mClickListener: ChatAdapter.ChatAdapterInterface? = null
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MessageData>(){
             override fun areItemsTheSame(oldItem: MessageData, newItem: MessageData): Boolean {
                 return oldItem.id == newItem.id
@@ -80,6 +81,19 @@ class ChatAdapter(val context: Context) : PagingDataAdapter<MessageData, ChatAda
                 messageStatus.setImageResource(R.drawable.seen_message_icon)
             }
         }
+    }
+    interface ChatAdapterInterface{
+        fun onItemClicked(messageTime: String)
+    }
+
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
+        super.onViewAttachedToWindow(holder)
+
+        mClickListener = chatInterface
+        val cur = getItem(holder.absoluteAdapterPosition)
+
+        mClickListener!!.onItemClicked(cur?.send_timestamp!!)
+
     }
 
     override fun getItemViewType(position: Int): Int {

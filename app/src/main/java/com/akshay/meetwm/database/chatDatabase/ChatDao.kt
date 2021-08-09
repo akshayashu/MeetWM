@@ -35,6 +35,10 @@ interface ChatDao {
 
     @Transaction
     @Query("Select * from ChatModel where uid = :uid")
-    fun getAllChat(uid: String) : LiveData<List<ChatAndMessages>>
+    fun getChat(uid: String) : LiveData<List<ChatAndMessages>>
+
+    @Transaction
+    @Query("Select * from ChatModel where uid in (Select chat_uid from MessageData group by chat_uid)")
+    fun getAllChatList() : LiveData<List<ChatAndMessages>>
 
 }

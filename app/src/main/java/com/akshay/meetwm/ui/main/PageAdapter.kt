@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.akshay.meetwm.ui.chatFragment.ChatFragment
+import com.akshay.meetwm.ui.chatListFragment.ChatFragment
 import com.akshay.meetwm.ui.historyFragment.HistoryFragment
 import com.akshay.meetwm.ui.statusFragment.StatusFragment
 
