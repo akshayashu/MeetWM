@@ -7,9 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.akshay.meetwm.database.contactDatabase.ContactDatabase
+import com.akshay.meetwm.model.ChatAndMessages
 import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.Contact
 import com.akshay.meetwm.model.MessageData
+import com.akshay.meetwm.respository.ChatListRepository
 import com.akshay.meetwm.respository.ChatRepository
 import com.akshay.meetwm.respository.ContactRepository
 import com.akshay.meetwm.respository.MainRepository
@@ -20,7 +22,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo : ContactRepository
     private val chatRepo : ChatRepository
-//    val allContacts : LiveData<List<Contact>>
+
     private val mainRepo : MainRepository
     val list = MutableLiveData<ArrayList<Contact>>()
 
@@ -31,6 +33,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repo = ContactRepository(dao)
         mainRepo = MainRepository(application.contentResolver)
         chatRepo = ChatRepository(chatDao, "nothing")
+
     }
 
     //for contact sections
@@ -58,4 +61,5 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getUnseenMessageId(chat_uid: String) : List<MessageData>{
         return chatRepo.getUnseenMessageID(chat_uid)
     }
+
 }

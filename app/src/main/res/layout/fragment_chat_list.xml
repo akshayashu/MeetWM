@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    android:id="@+id/chatFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,26 +19,26 @@
             tools:listitem="@layout/item_chat"
             android:layout_weight="1"/>
 
-        <EditText
-            android:id="@+id/userNameEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your name"
-            android:padding="10dp"
-            android:background="@drawable/round_strip_blue"
-            android:layout_margin="10dp"
-            android:textSize="16sp"/>
+<!--        <EditText-->
+<!--            android:id="@+id/userNameEdit"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Enter your name"-->
+<!--            android:padding="10dp"-->
+<!--            android:background="@drawable/round_strip_blue"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:textSize="16sp"/>-->
 
-        <TextView
-            android:id="@+id/signOutBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign Out"
-            android:textSize="16sp"
-            android:textColor="#000"
-            android:padding="10dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/round_strip_blue"/>
+<!--        <TextView-->
+<!--            android:id="@+id/signOutBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Sign Out"-->
+<!--            android:textSize="16sp"-->
+<!--            android:textColor="#000"-->
+<!--            android:padding="10dp"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:background="@drawable/round_strip_blue"/>-->
     </LinearLayout>
 
 </FrameLayout>

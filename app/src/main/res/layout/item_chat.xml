@@ -1,50 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_margin="8dp"
-        android:layout_gravity="center"
-        android:src="@drawable/blank_person"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chat_image_view"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            app:civ_border_width="1dp"
+            android:src="@drawable/blank_person"/>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Friend of mine"
-            android:textSize="14sp"
-            android:textColor="@color/black"/>
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/chat_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Friend of mine"
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/chat_last_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="His last message His last message last message "
+                android:maxLines="1"
+                android:maxWidth="200dp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="12sp"
+                android:textColor="#828282"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
+            android:id="@+id/chat_last_message_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="His last message"
+            android:text="10:30"
             android:textSize="12sp"
-            android:textColor="#828282"/>
+            android:textColor="#828282"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"/>
     </LinearLayout>
 
     <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/secondary_color"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10:30"
-        android:textSize="12sp"
-        android:textColor="#828282"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"/>
 </LinearLayout>

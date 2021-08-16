@@ -1,5 +1,7 @@
 package com.akshay.meetwm.ui.chatListFragment
 
+import android.content.Context
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,27 +11,37 @@ import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.ChatAndMessages
 import com.akshay.meetwm.model.MessageData
+import com.bumptech.glide.Glide
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatListAdapter(private val list : ArrayList<ChatAndMessages>) : RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
 
+    lateinit var context : Context
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        val name: TextView = itemView.findViewById(R.id.name)
-        val number: TextView = itemView.findViewById(R.id.contactNumber)
-        val deleteBtn: ImageView = itemView.findViewById(R.id.deleteBtn)
-        val status : TextView = itemView.findViewById(R.id.status)
-        val dpImageView : ImageView = itemView.findViewById(R.id.imageView)
+        val name: TextView = itemView.findViewById(R.id.chat_name)
+        val dpImageView : ImageView = itemView.findViewById(R.id.chat_image_view)
+        val lastMessage : TextView = itemView.findViewById(R.id.chat_last_message)
+        val lastMessageTime : TextView = itemView.findViewById(R.id.chat_last_message_time)
+        
+        fun bind(cur : ChatAndMessages) = with(itemView){
+
+            name.text = cur.chat.name
+            lastMessage.text = cur.messages.last().data
+            lastMessageTime.text = getTimeFormat(context, cur.messages.last().send_timestamp.toLong())
+            Glide.with(context).load(cur.messages.last().status).into(dpImageView)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val viewHolder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_contact,parent, false))
+        context = parent.context
+        val viewHolder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_chat,parent, false))
         return viewHolder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val cur = list[position]
-
-        holder.name.text = cur.chat.name
-        holder.status.text = cur.chat.staus
+        holder.bind(cur)
     }
 
     override fun getItemCount(): Int {
@@ -42,4 +54,26 @@ class ChatListAdapter(private val list : ArrayList<ChatAndMessages>) : RecyclerV
 
         notifyDataSetChanged()
     }
+
+    fun getTimeFormat(context: Context, timeStamp: Long) : String{
+        val smsTime = Calendar.getInstance()
+        smsTime.timeInMillis = timeStamp
+
+        val curTime = Calendar.getInstance()
+
+        val timeFormatString = "h:mm aa"
+        val dateTimeFormatString = "d MMMM"
+        val HOURS : Long = 60 * 60 * 60
+
+        if(curTime.get(Calendar.DATE) == smsTime.get(Calendar.DATE)){
+            return DateFormat.format(timeFormatString, smsTime).toString()
+        } else if (curTime.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1  ){
+            return "Yesterday"
+        } else if (curTime.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
+            return DateFormat.format(dateTimeFormatString, smsTime).toString();
+        } else {
+            return DateFormat.format("yyyy", smsTime).toString();
+        }
+    }
+
 }

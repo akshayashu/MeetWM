@@ -1,20 +1,19 @@
 package com.akshay.meetwm.ui.chatListFragment
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.*
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.ChatAndMessages
-import com.akshay.meetwm.model.Contact
-import com.akshay.meetwm.ui.signInActivity.SignInActivity
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_chat_list.*
+import com.akshay.meetwm.ui.main.MainViewModel
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,8 +25,13 @@ class ChatFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val mainViewModel: MainChatSharedViewModel by activityViewModels()
     private lateinit var viewModel : ChatListViewModel
+
+    private var perList = ArrayList<ChatAndMessages>()
     private var list = ArrayList<ChatAndMessages>()
+    var filteredList = ArrayList<ChatAndMessages>()
+    lateinit var adapter : ChatListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +55,7 @@ class ChatFragment : Fragment() {
         viewModel = ViewModelProvider(
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(activity?.application!!)).get(ChatListViewModel::class.java)
 
-
-        val adapter = ChatListAdapter(list)
+        adapter = ChatListAdapter(list)
         val recyclerView = view.findViewById<RecyclerView>(R.id.chatRecyclerView)
 
         val linearLayoutManager = LinearLayoutManager(this.context)
@@ -60,13 +63,32 @@ class ChatFragment : Fragment() {
         recyclerView.adapter = adapter
 
         viewModel.allChat.observe(viewLifecycleOwner, {
+            perList.addAll(it)
+            list.addAll(it)
             adapter.update(it)
         })
-        signOutBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this.context, SignInActivity::class.java))
-            activity?.finish()
+
+        mainViewModel.changeHeadline.observe(viewLifecycleOwner, {
+            list = perList
+            searchChat(it)
+        })
+
+    }
+
+    private fun searchChat(query : String?){
+
+        filteredList.clear()
+        for (e in list){
+            Log.d("Chat List name", e.chat.name)
         }
+        for (e in list) {
+            val name = e.chat.name
+            if(name.toLowerCase().contains(query.toString())){
+                Log.d("Found name", name)
+                filteredList.add(e)
+            }
+        }
+        adapter.update(filteredList)
     }
 
     companion object {
@@ -81,4 +103,5 @@ class ChatFragment : Fragment() {
                 }
             }
     }
+
 }

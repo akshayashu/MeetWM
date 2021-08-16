@@ -1,26 +1,35 @@
 package com.akshay.meetwm.ui.main
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import android.widget.Toast
+import android.view.Menu
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.akshay.meetwm.R
-import com.akshay.meetwm.model.Contact
-import com.akshay.meetwm.model.MessageData
-import com.akshay.meetwm.model.ReceivedMessage
-import com.akshay.meetwm.model.SeenMessage
+import com.akshay.meetwm.model.*
 import com.akshay.meetwm.socket.SocketInstance
 import com.akshay.meetwm.ui.SharedPref
 import com.akshay.meetwm.ui.callActivity.CallTestActivity
-import com.akshay.meetwm.ui.chatListFragment.ChatListViewModel
+import com.akshay.meetwm.ui.chatListFragment.MainChatSharedViewModel
 import com.akshay.meetwm.ui.contact.ContactActivity
+import com.akshay.meetwm.ui.signInActivity.SignInActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -45,6 +54,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mSocket : Socket
 
+    private val mainViewModel: MainChatSharedViewModel by viewModels()
+
     private lateinit var viewModel: MainViewModel
     private var list = ArrayList<Contact>()
 
@@ -61,10 +72,47 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(toolbar)
         //set up view
         viewModel = ViewModelProvider(this,
                ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(MainViewModel::class.java)
 
+        val appTitle = findViewById<TextView>(R.id.app_title)
+        val searchButton = findViewById<ImageView>(R.id.search_button)
+        val searchText = findViewById<EditText>(R.id.searchEditText)
+
+        searchButton.setOnClickListener {
+            searchButton.visibility = View.GONE
+            appTitle.visibility = View.GONE
+            searchText.visibility = View.VISIBLE
+        }
+
+        searchText.setOnFocusChangeListener{view, hasFocus ->
+            if(!hasFocus) {
+                searchButton.visibility = View.VISIBLE
+                appTitle.visibility = View.VISIBLE
+                searchText.visibility = View.GONE
+            }
+        }
+
+        searchText.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                Log.d("TEXT WATCHER 2", p0.toString())
+                if(p0.toString() != ""){
+                    mainViewModel.changeQuery(p0.toString().toLowerCase())
+                }else{
+                    mainViewModel.changeQuery(p0.toString())
+                }
+
+            }
+
+        })
 
         viewModel.getContact()
         viewModel.list.observe(this, {
@@ -91,11 +139,8 @@ class MainActivity : AppCompatActivity() {
             mSocket.connect()
 
             mSocket.on(Socket.EVENT_CONNECT, onConnect)
-//            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
-//            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
             val myUID = SharedPref(applicationContext).getUserID()
             mSocket.emit("join", myUID)
-            Log.d("SOCKET", "CREATED in Main")
         }catch (e : Exception){
             Log.d("SOCKET EXCEPTION", e.localizedMessage)
         }
@@ -180,6 +225,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_chat_menu, menu)
+        Log.d("MENU is", "Created")
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.logout_btn -> {
+                FirebaseAuth.getInstance().signOut()
+                startActivity(Intent(this, SignInActivity::class.java))
+                finish()
+                return true
+            }
+            R.id.settings_btn ->{
+                Toast.makeText(this, "Settings item", Toast.LENGTH_SHORT).show()
+                Log.d("settings", "pressed")
+                return true
+            }
+            R.id.newGroup_btn ->{
+                Toast.makeText(this, "New Group item", Toast.LENGTH_SHORT).show()
+                Log.d("new group", "pressed")
+                return true
+            }
+            else ->{
+                return super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
     private fun showPref() {
         pref = SharedPref(this)
 
@@ -188,18 +263,13 @@ class MainActivity : AppCompatActivity() {
         firebaseRef.child(pref.getUserID().toString()).child("callStatus").setValue("")
         firebaseRef.child(pref.getUserID().toString()).child("isAvailable").setValue(true)
         firebaseRef.child(pref.getUserID().toString()).child("connId").setValue("")
-
-        Log.d("Username", pref.getUserName().toString())
-        Log.d("UserPhoto", pref.getUserImageBitmap().toString())
-        Log.d("UserStatus", pref.getUserStatus().toString())
-        Log.d("UserPhone", pref.getUserNumber().toString())
-        Log.d("UserID", pref.getUserID().toString())
     }
 
     private fun configureTabLayout() {
 
         val adapter = PageAdapter(supportFragmentManager, lifecycle)
         pager.adapter = adapter
+
 
         TabLayoutMediator(tabLayout, pager){tab, position ->
             when(position){
@@ -235,10 +305,30 @@ class MainActivity : AppCompatActivity() {
     private val onConnectTimeout = Emitter.Listener { runOnUiThread { Log.d("Tag-Socket", "Socket Timeout !") } }
     private val onDisconnect = Emitter.Listener { runOnUiThread {Log.d("Tag-Socket", "Socket Disconnected!") } }
 
+    //handle editText focus
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val v: View? = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    Log.d("focus", "touchevent")
+                    v.clearFocus()
+                    val imm: InputMethodManager =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         val pref = SharedPref(this)
         mSocket.emit("disconnect", pref.getUserID())
         Log.d("SOCKET", "Destroyed")
     }
+
 }
