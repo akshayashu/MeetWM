@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.akshay.meetwm">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,21 +18,19 @@
 
     <application
         android:name=".socket.SocketInstance"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MeetWM"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.callActivity.CallTestActivity"></activity>
         <activity android:name=".ui.chatActivity.ChatActivity" />
         <activity android:name=".ui.RegisterUser.RegisterUser" />
         <activity android:name=".ui.contact.ContactActivity" />
         <activity android:name=".ui.signInActivity.SignInActivity" />
         <activity android:name=".ui.otpVerify.OTPVerify" />
         <activity
-            android:name=".ui.callActivity.CallActivity"
+            android:name=".ui.callActivity.CallTestActivity"
             android:theme="@style/Theme.MeetWM.fullscreen" />
         <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.SplashScreenActivity">

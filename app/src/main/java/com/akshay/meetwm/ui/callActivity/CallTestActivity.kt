@@ -13,6 +13,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import com.akshay.meetwm.R
 import com.akshay.meetwm.appInterface.JavascriptInterfaceTest
+import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -27,9 +28,11 @@ class CallTestActivity : AppCompatActivity() {
     var uniqueID = "1"
     var canCall = false
 
-    var userName = ""
+    var myId = ""
     var friendUserName = ""
+    var friendUserId = ""
     var callType = ""
+    var photoURL = ""
 
     var firebaseRef = Firebase.database.getReference("users")
     var isAudio = true
@@ -44,10 +47,12 @@ class CallTestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_test)
 
-        userName = intent.getStringExtra("username")!!
+        myId = intent.getStringExtra("myId")!!
+        friendUserId = intent.getStringExtra("callerId")!!
         friendUserName = intent.getStringExtra("friendUserName")!!
         callType = intent.getStringExtra("callType")!!
-        Log.d("USERNAME", userName)
+        photoURL = intent.getStringExtra("photoURL")!!
+        Log.d("USERNAME", myId)
 
         if(callType == "outgoing"){ // come here because I want to call somebody
             sendCallRequest()
@@ -78,12 +83,12 @@ class CallTestActivity : AppCompatActivity() {
             )
         }
         endCallBtn.setOnClickListener {
-            firebaseRef.child(userName).child("callStatus").setValue("ended")
+            firebaseRef.child(myId).child("callStatus").setValue("ended")
             finish()
         }
 
         // waiting for friend's response on my call
-        firebaseRef.child(friendUserName)
+        firebaseRef.child(friendUserId)
             .child("callStatus").addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.value.toString() == "accepted"){
@@ -93,7 +98,7 @@ class CallTestActivity : AppCompatActivity() {
                         webView.alpha = 1.0F
                     }else if (snapshot.value.toString() == "rejected"){
                         Toast.makeText(this@CallTestActivity, "He/She is busy", Toast.LENGTH_SHORT).show()
-                        firebaseRef.child(userName).child("isAvailable").setValue(true)
+                        firebaseRef.child(myId).child("isAvailable").setValue(true)
                         finish()
                     } else if (snapshot.value.toString() == "ended"){
                         Toast.makeText(this@CallTestActivity, "Call Ended", Toast.LENGTH_SHORT).show()
@@ -108,7 +113,7 @@ class CallTestActivity : AppCompatActivity() {
             })
 
         // listen for incoming calls
-        firebaseRef.child(userName)
+        firebaseRef.child(myId)
             .child("incoming").addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.value.toString().trim() == null){
@@ -127,25 +132,31 @@ class CallTestActivity : AppCompatActivity() {
     private fun respondToCall(callerId: String) {
 
         callLayout.visibility = View.VISIBLE
-        incomingCalltext.text = "$callerId is calling..."
+        Glide.with(applicationContext).load(photoURL).into(callerPhoto)
+        if(callType == "outgoing"){
+            incomingCalltext.text = "$friendUserName\nCalling..."
+        }else{
+            incomingCalltext.text = "$friendUserName is calling..."
+        }
+
 
         acceptCall.setOnClickListener {
-            firebaseRef.child(userName).child("connId").setValue(uniqueID);
-            firebaseRef.child(userName).child("isAvailable").setValue(false)
-            firebaseRef.child(userName).child("callStatus").setValue("accepted")
+            firebaseRef.child(myId).child("connId").setValue(uniqueID);
+            firebaseRef.child(myId).child("isAvailable").setValue(false)
+            firebaseRef.child(myId).child("callStatus").setValue("accepted")
 
             hideIncomingLayout()
             setOutgoingLayout()
         }
 
         rejectCall.setOnClickListener {
-            firebaseRef.child(userName).child("callStatus").setValue("rejected")
+            firebaseRef.child(myId).child("callStatus").setValue("rejected")
             finish()
         }
     }
 
     private fun listenCall() {
-        firebaseRef.child(friendUserName)
+        firebaseRef.child(friendUserId)
             .child("connId").addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.value == null)
@@ -167,11 +178,10 @@ class CallTestActivity : AppCompatActivity() {
             return
         }
 
-        firebaseRef.child(friendUserName).child("incoming").setValue(userName)
-        firebaseRef.child(friendUserName).child("callStatus").setValue("waiting")
+        firebaseRef.child(friendUserId).child("incoming").setValue(myId)
+        firebaseRef.child(friendUserId).child("callStatus").setValue("waiting")
 
-        firebaseRef.child(userName).child("isAvailable").setValue(false)
-
+        firebaseRef.child(myId).child("isAvailable").setValue(false)
 
     }
 
@@ -248,10 +258,10 @@ class CallTestActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        firebaseRef.child(userName).child("incoming").setValue("")
-        firebaseRef.child(userName).child("callStatus").setValue("")
-        firebaseRef.child(userName).child("isAvailable").setValue(true)
-        firebaseRef.child(userName).child("connId").setValue("")
+        firebaseRef.child(myId).child("incoming").setValue("")
+        firebaseRef.child(myId).child("callStatus").setValue("")
+        firebaseRef.child(myId).child("isAvailable").setValue(true)
+        firebaseRef.child(myId).child("connId").setValue("")
         webView.loadUrl("about:blank")
         super.onDestroy()
     }

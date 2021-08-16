@@ -11,7 +11,7 @@ import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.Contact
 import com.akshay.meetwm.model.MessageData
 
-@Database(entities = [Contact::class, ChatModel::class, MessageData::class], version = 2, exportSchema = false)
+@Database(entities = [Contact::class, ChatModel::class, MessageData::class], version = 3, exportSchema = false)
 abstract class ContactDatabase : RoomDatabase() {
 
     abstract fun getContactDao() : ContactDao

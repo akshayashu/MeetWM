@@ -12,6 +12,10 @@ class ContactRepository(private val contactDao: ContactDao) {
         contactDao.insert(contact)
     }
 
+    suspend fun getContact(uid : String) : Contact{
+        return contactDao.getContact(uid)
+    }
+
     suspend fun delete(contact: Contact){
         contactDao.delete(contact)
     }

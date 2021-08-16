@@ -6,6 +6,7 @@ import com.akshay.meetwm.model.ChatAndMessages
 import com.akshay.meetwm.model.ChatModel
 import com.akshay.meetwm.model.Contact
 import com.akshay.meetwm.model.MessageData
+import retrofit2.http.GET
 
 @Dao
 interface ContactDao {
@@ -19,4 +20,7 @@ interface ContactDao {
 
     @Delete
     suspend fun delete(contact: Contact)
+
+    @Query("Select * from contacts_table where uid = :curUID")
+    suspend fun getContact(curUID : String) : Contact
 }

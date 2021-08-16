@@ -53,7 +53,8 @@ class OTPVerify : AppCompatActivity() {
 
         val callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-                TODO("Not yet implemented")
+//                verificationId = p0.smsCode.toString()
+                Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
             }
 
             override fun onVerificationFailed(p0: FirebaseException) {

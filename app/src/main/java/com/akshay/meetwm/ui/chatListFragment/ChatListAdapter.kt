@@ -1,16 +1,20 @@
 package com.akshay.meetwm.ui.chatListFragment
 
 import android.content.Context
+import android.content.Intent
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.ChatAndMessages
 import com.akshay.meetwm.model.MessageData
+import com.akshay.meetwm.ui.SharedPref
+import com.akshay.meetwm.ui.chatActivity.ChatActivity
 import com.bumptech.glide.Glide
 import java.util.*
 import kotlin.collections.ArrayList
@@ -23,13 +27,24 @@ class ChatListAdapter(private val list : ArrayList<ChatAndMessages>) : RecyclerV
         val dpImageView : ImageView = itemView.findViewById(R.id.chat_image_view)
         val lastMessage : TextView = itemView.findViewById(R.id.chat_last_message)
         val lastMessageTime : TextView = itemView.findViewById(R.id.chat_last_message_time)
+        val chatLinearLayout : LinearLayout = itemView.findViewById(R.id.chatLinearLayout)
         
         fun bind(cur : ChatAndMessages) = with(itemView){
 
             name.text = cur.chat.name
             lastMessage.text = cur.messages.last().data
             lastMessageTime.text = getTimeFormat(context, cur.messages.last().send_timestamp.toLong())
-            Glide.with(context).load(cur.messages.last().status).into(dpImageView)
+            Glide.with(context).load(cur.chat.dp_url).into(dpImageView)
+
+            chatLinearLayout.setOnClickListener {
+                val myUID = SharedPref(context).getUserID()
+                val intent = Intent(context.applicationContext, ChatActivity::class.java)
+                intent.putExtra("name", cur.chat.name)
+                intent.putExtra("chatUID", cur.chat.uid)
+                intent.putExtra("myUID", myUID)
+                intent.putExtra("chatNumber", cur.chat.number)
+                context.startActivity(intent)
+            }
         }
     }
 

@@ -203,12 +203,21 @@ class MainActivity : AppCompatActivity() {
                     if(snapshot.value.toString().trim() == ""){
                         return
                     }else {
-                        val intent = Intent(this@MainActivity, CallTestActivity::class.java)
-                        intent.putExtra("username", pref.getUserID().toString())
-                        intent.putExtra("friendUserName", snapshot.value.toString())
-                        intent.putExtra("callType", "incoming")
-                        Toast.makeText(this@MainActivity, "Incoming call", Toast.LENGTH_SHORT).show()
-                        startActivity(intent)
+
+                        viewModel.getCallingContact(snapshot.value.toString())
+                        viewModel.callerDetails.observe(this@MainActivity, { contact ->
+                            if (contact != null){
+                                val intent = Intent(this@MainActivity, CallTestActivity::class.java)
+                                intent.putExtra("myId", pref.getUserID().toString())
+                                intent.putExtra("callerId", contact.uid)
+                                // one case has to be handled, when unknown person will call and his contact is not saved
+                                intent.putExtra("friendUserName", contact.display_name)
+                                intent.putExtra("photoURL", contact.dp_url)
+                                intent.putExtra("callType", "incoming")
+                                Toast.makeText(this@MainActivity, "Incoming call", Toast.LENGTH_SHORT).show()
+                                startActivity(intent)
+                            }
+                        })
                     }
                 }
 
@@ -216,6 +225,24 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+
+//        viewModel.callerDetails.observe(this, {
+//            if (it != null){
+//                startIncomingCallActivity(it)
+//            }
+//        })
+    }
+
+    private fun startIncomingCallActivity(contact : Contact) {
+        val intent = Intent(this@MainActivity, CallTestActivity::class.java)
+        intent.putExtra("myId", pref.getUserID().toString())
+        intent.putExtra("callerId", contact.uid)
+        // one case has to be handled, when unknown person will call and his contact is not saved
+        intent.putExtra("friendUserName", contact.display_name)
+        intent.putExtra("photoURL", contact.dp_url)
+        intent.putExtra("callType", "incoming")
+        Toast.makeText(this@MainActivity, "Incoming call", Toast.LENGTH_SHORT).show()
+        startActivity(intent)
     }
 
     private fun updateList() {
@@ -327,7 +354,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         val pref = SharedPref(this)
-        mSocket.emit("disconnect", pref.getUserID())
+//        mSocket.emit("disconnect", pref.getUserID())
         Log.d("SOCKET", "Destroyed")
     }
 

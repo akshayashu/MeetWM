@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chatDp"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/blank_person"
@@ -30,6 +31,7 @@
             android:layout_marginStart="20dp"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/chatUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Akshay Khanna"

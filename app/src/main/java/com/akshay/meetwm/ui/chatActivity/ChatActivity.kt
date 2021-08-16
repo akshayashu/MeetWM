@@ -21,18 +21,17 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
-import com.akshay.meetwm.model.ChatAndMessages
-import com.akshay.meetwm.model.ChatModel
-import com.akshay.meetwm.model.MessageData
-import com.akshay.meetwm.model.SeenMessage
+import com.akshay.meetwm.model.*
 import com.akshay.meetwm.socket.SocketInstance
 import com.akshay.meetwm.ui.callActivity.CallTestActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import de.hdodenhof.circleimageview.CircleImageView
 import io.socket.client.Socket
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,7 +54,6 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var myUID : String
     private lateinit var chatNumber: String
     private var listOfMessage = ArrayList<MessageData>()
-    private var messages = ArrayList<PagingData<MessageData>>()
 
     lateinit var editText : TextView
     lateinit var recyclerView : RecyclerView
@@ -63,13 +61,13 @@ class ChatActivity : AppCompatActivity() {
     lateinit var callBtn: ImageView
     lateinit var dateTextView : TextView
     lateinit var linearLayoutManager : LinearLayoutManager
+    lateinit var dpImageView: CircleImageView
+    lateinit var chatName : TextView
+
+    lateinit var currentContact : Contact
 
     lateinit var viewModel: ChatViewModel
     var firebaseRef = Firebase.database.getReference("users")
-
-    override fun onStart() {
-        super.onStart()
-    }
 
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +79,12 @@ class ChatActivity : AppCompatActivity() {
         myUID = intent.getStringExtra("myUID")!!
         chatNumber = intent.getStringExtra("chatNumber")!!
 
+        // views
+        editText = findViewById(R.id.msgEditText)
+        recyclerView = findViewById(R.id.messageRecyclerView)
+        dpImageView = findViewById(R.id.chatDp)
+        chatName = findViewById(R.id.chatUserName)
+
         callBtn = findViewById(R.id.callBtn)
         dateTextView = findViewById(R.id.dateText)
 
@@ -90,38 +94,8 @@ class ChatActivity : AppCompatActivity() {
                 dateTextView.text = getTimeFormat(messageTime.toLong())
             }
         }
-        // views
-        editText = findViewById(R.id.msgEditText)
-        recyclerView = findViewById(R.id.messageRecyclerView)
         adapter = ChatAdapter(this, itemClicked)
 
-        callBtn.setOnClickListener {
-
-            val intent = Intent(this, CallTestActivity::class.java)
-            intent.putExtra("username", myUID)
-            intent.putExtra("friendUserName", chatUID)
-            intent.putExtra("callType", "outgoing")
-
-            firebaseRef.child(chatUID)
-                .child("isAvailable")
-                .addListenerForSingleValueEvent(object : ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if(snapshot.value.toString() == "true"){
-                            startActivity(intent)
-                            Toast.makeText(this@ChatActivity, "Calling", Toast.LENGTH_SHORT).show()
-                        }else{
-                            Toast.makeText(this@ChatActivity, "He/She is busy", Toast.LENGTH_SHORT).show()
-                            return
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-
-                })
-
-        }
 
         //recyclerView
         linearLayoutManager = LinearLayoutManager(this)
@@ -151,6 +125,11 @@ class ChatActivity : AppCompatActivity() {
         val chatViewModelFactory = ChatViewModelFactory(application, chatUID);
         viewModel = ViewModelProvider(this, chatViewModelFactory).get(ChatViewModel::class.java)
 
+        viewModel.getContact(chatUID)
+        viewModel.currentContact.observe(this, {
+            currentContact = it
+            Glide.with(this).load(currentContact.dp_url).into(dpImageView)
+        })
         // observing only list of messages
         lifecycleScope.launch {
             viewModel.allMessages.collectLatest { list ->
@@ -159,17 +138,36 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        callBtn.setOnClickListener {
 
+            val intent = Intent(this, CallTestActivity::class.java)
+            intent.putExtra("myId", myUID)
+            intent.putExtra("callerId", chatUID)
+            intent.putExtra("friendUserName", currentContact.display_name)
+            intent.putExtra("photoURL", currentContact.dp_url)
+            intent.putExtra("callType", "outgoing")
 
+            firebaseRef.child(chatUID)
+                .child("isAvailable")
+                .addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if(snapshot.value.toString() == "true"){
+                            startActivity(intent)
+                            Toast.makeText(this@ChatActivity, "Calling", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(this@ChatActivity, "He/She is busy", Toast.LENGTH_SHORT).show()
+                            return
+                        }
+                    }
 
-//        (this, {list ->
-//            list?.let {
-//                if(list.isNotEmpty()){
-//                    adapter.update(list)
-//                    listOfMessage.addAll(list)
-//                }
-//            }
-//        })
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+
+        }
+        chatName.text = username
 
         // observing the whole chatAndMessages data
 //        viewModel.allChatMessages.observe(this, { list ->
@@ -198,7 +196,13 @@ class ChatActivity : AppCompatActivity() {
 
             mSocket.emit("sendMessage", Gson().toJson(myMessage))
 
-            viewModel.insertChat(ChatModel(chatUID, chatNumber, "offline", username, 0))
+            if(currentContact != null){
+                viewModel.insertChat(ChatModel(
+                    chatUID, chatNumber, username,currentContact.global_name,
+                    currentContact.status,"offline",
+                    currentContact.dp_url, "0", true))
+            }
+
             viewModel.insertMessage(myMessage)
             editText.text = ""
         }

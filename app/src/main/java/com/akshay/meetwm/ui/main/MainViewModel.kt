@@ -25,6 +25,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mainRepo : MainRepository
     val list = MutableLiveData<ArrayList<Contact>>()
+    val callerDetails = MutableLiveData<Contact>()
 
     init {
         val dao = ContactDatabase.getDatabase(application).getContactDao()
@@ -43,6 +44,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insertContact(contact: Contact) = viewModelScope.launch(Dispatchers.IO) {
         repo.insert(contact)
+    }
+
+    fun getCallingContact(uid : String) = viewModelScope.launch(Dispatchers.IO){
+        callerDetails.postValue(repo.getContact(uid))
     }
 
     //for chat and message sections

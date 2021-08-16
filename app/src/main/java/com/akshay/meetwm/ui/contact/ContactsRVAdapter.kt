@@ -46,7 +46,7 @@ class ContactsRVAdapter(private val listener: IContactsRVAdapter) : RecyclerView
         holder.name.setOnClickListener {
             val myUID = SharedPref(context).getUserID()
             val intent = Intent(context.applicationContext, ChatActivity::class.java)
-            intent.putExtra("name", cur.global_name)
+            intent.putExtra("name", cur.display_name)
             intent.putExtra("chatUID", cur.uid)
             intent.putExtra("myUID", myUID)
             intent.putExtra("chatNumber", cur.number)
