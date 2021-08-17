@@ -5,9 +5,9 @@
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryVariant">@color/secondary_color</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="fontFamily">@font/cormorant_garamond_regular</item>
         <!-- for collapsing toolbar text  -->
         <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textSize">18sp</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondary_color</item>
         <item name="colorAccent">@color/light_green</item>

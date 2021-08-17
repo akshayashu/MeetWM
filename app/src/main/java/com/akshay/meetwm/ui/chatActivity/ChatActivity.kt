@@ -203,8 +203,13 @@ class ChatActivity : AppCompatActivity() {
         }
 
         // scroll smoothly to last item
+        var check = true
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if(check){
+                    linearLayoutManager.scrollToPosition(positionStart + itemCount)
+                    check = false
+                }
                 linearLayoutManager.scrollToPosition(positionStart)
             }
         })

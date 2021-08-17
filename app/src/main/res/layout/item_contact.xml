@@ -21,7 +21,6 @@
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/allerta"
         android:padding="5dp"
         android:textColor="@color/black"
         android:layout_marginStart="10dp"
@@ -35,7 +34,6 @@
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/allerta"
         android:maxLines="1"
         android:paddingStart="5dp"
         android:textColor="#626262"
@@ -56,7 +54,6 @@
         android:layout_marginBottom="5dp"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:fontFamily="@font/allerta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageView"
         app:layout_constraintTop_toBottomOf="@id/name"/>

@@ -103,7 +103,6 @@
         android:layout_margin="40dp"
         android:background="@drawable/blue_background"
         android:text="@string/continue_"
-        android:fontFamily="@font/allerta"
         android:gravity="center"
         android:padding="10dp"
         android:textColor="@color/white"
