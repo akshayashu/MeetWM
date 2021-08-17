@@ -5,7 +5,7 @@
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryVariant">@color/secondary_color</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="fontFamily">@font/cormorant_garamond_regular</item>
+        <item name="fontFamily">@font/nunito</item>
         <!-- for collapsing toolbar text  -->
         <item name="android:textColorPrimary">@color/white</item>
         <!-- Secondary brand color. -->

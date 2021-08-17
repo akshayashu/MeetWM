@@ -201,16 +201,35 @@ class ChatActivity : AppCompatActivity() {
             viewModel.insertMessage(myMessage)
             editText.text = ""
         }
-
+        linearLayoutManager.scrollToPosition(10000)
         // scroll smoothly to last item
-        var check = true
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if(check){
-                    linearLayoutManager.scrollToPosition(positionStart + itemCount)
-                    check = false
-                }
+            override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
                 linearLayoutManager.scrollToPosition(positionStart)
+            }
+
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                linearLayoutManager.scrollToPosition(positionStart)
+            }
+
+            override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
+                linearLayoutManager.scrollToPosition(positionStart)
+            }
+
+            override fun onChanged() {
+                super.onChanged()
+            }
+
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                super.onItemRangeRemoved(positionStart, itemCount)
+            }
+
+            override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+                linearLayoutManager.scrollToPosition(toPosition)
+            }
+
+            override fun onStateRestorationPolicyChanged() {
+                super.onStateRestorationPolicyChanged()
             }
         })
     }

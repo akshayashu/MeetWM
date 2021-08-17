@@ -30,15 +30,16 @@
             android:layout_gravity="center"
             android:layout_marginStart="20dp"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/chatUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Akshay Khanna"
                 android:layout_gravity="center"
-                android:textSize="18sp"
+                android:text="Akshay Khanna"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
