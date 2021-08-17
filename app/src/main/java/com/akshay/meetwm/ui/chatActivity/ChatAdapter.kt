@@ -83,7 +83,7 @@ class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterIn
         }
     }
     interface ChatAdapterInterface{
-        fun onItemClicked(messageTime: String)
+        fun getTopTimeStampOfChat(messageTime: String)
     }
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
@@ -92,7 +92,7 @@ class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterIn
         mClickListener = chatInterface
         val cur = getItem(holder.absoluteAdapterPosition)
 
-        mClickListener!!.onItemClicked(cur?.send_timestamp!!)
+        mClickListener!!.getTopTimeStampOfChat(cur?.send_timestamp!!)
 
     }
 

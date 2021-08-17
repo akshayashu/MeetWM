@@ -54,4 +54,8 @@ class ChatViewModel(application: Application, uid: String) : AndroidViewModel(ap
     fun getContact(uid : String) = viewModelScope.launch(Dispatchers.IO){
         currentContact.postValue(contactRepo.getContact(uid))
     }
+
+    fun updateUnseenMessageCount(chat_uid: String, value : String) = viewModelScope.launch(Dispatchers.IO){
+        repo.updateUnseenMsgCount(chat_uid, value)
+    }
 }

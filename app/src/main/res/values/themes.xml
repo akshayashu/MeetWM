@@ -5,6 +5,9 @@
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryVariant">@color/secondary_color</item>
         <item name="colorOnPrimary">@color/white</item>
+        <!-- for collapsing toolbar text  -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textSize">18sp</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondary_color</item>
         <item name="colorAccent">@color/light_green</item>
@@ -20,18 +23,27 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
-    <style name="myMessageStyle">
-        <item name="neumorph_cornerFamily">rounded</item>
 
-        <item name="neumorph_cornerSizeTopLeft">14dp</item>
-        <item name="neumorph_cornerSizeBottomLeft">14dp</item>
-        <item name="neumorph_cornerSizeBottomRight">14dp</item>
+<!--    my message-->
+    <style name="CustomCardViewStyleMyMessage" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
     </style>
-    <style name="otherMessageStyle">
-        <item name="neumorph_cornerFamily">rounded</item>
+    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
+    </style>
 
-        <item name="neumorph_cornerSizeTopRight">14dp</item>
-        <item name="neumorph_cornerSizeBottomLeft">14dp</item>
-        <item name="neumorph_cornerSizeBottomRight">14dp</item>
+    <style name="CustomCardViewStyleOtherMessage" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners1</item>
+    </style>
+    <style name="ShapeAppearanceOverlay_card_custom_corners1" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">15dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
     </style>
 </resources>

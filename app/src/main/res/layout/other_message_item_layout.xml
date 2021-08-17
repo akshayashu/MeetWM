@@ -3,22 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="-5dp"
-    android:layout_marginTop="-10dp"
     android:layout_marginEnd="40dp"
+    android:padding="5dp"
+    android:clipToPadding="false"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
-    <soup.neumorphism.NeumorphCardView
-        style="@style/Widget.Neumorph.CardView"
-        app:neumorph_shapeAppearance="@style/otherMessageStyle"
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CustomCardViewStyleOtherMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:neumorph_backgroundColor="@color/blue">
+        app:cardBackgroundColor="@color/blue"
+        android:layout_gravity="start"
+        app:cardElevation="10dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clipToPadding="false"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/messageTextView"
@@ -57,8 +58,7 @@
                     android:src="@drawable/waiting_message_icon"/>
             </LinearLayout>
         </LinearLayout>
-
-    </soup.neumorphism.NeumorphCardView>
+    </com.google.android.material.card.MaterialCardView>
 
 
 </LinearLayout>

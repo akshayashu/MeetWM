@@ -9,6 +9,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.*
 import com.akshay.meetwm.socket.SocketInstance
+import com.akshay.meetwm.ui.ChatDetailActivity
 import com.akshay.meetwm.ui.callActivity.CallTestActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -63,6 +65,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var linearLayoutManager : LinearLayoutManager
     lateinit var dpImageView: CircleImageView
     lateinit var chatName : TextView
+    lateinit var chatDetailBtn : LinearLayout
 
     lateinit var currentContact : Contact
 
@@ -84,17 +87,17 @@ class ChatActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.messageRecyclerView)
         dpImageView = findViewById(R.id.chatDp)
         chatName = findViewById(R.id.chatUserName)
+        chatDetailBtn = findViewById(R.id.chatDetailBtn)
 
         callBtn = findViewById(R.id.callBtn)
         dateTextView = findViewById(R.id.dateText)
 
-        val itemClicked = object : ChatAdapter.ChatAdapterInterface{
-            override fun onItemClicked(messageTime: String) {
-
+        val getTopTimeStampOfChat = object : ChatAdapter.ChatAdapterInterface{
+            override fun getTopTimeStampOfChat(messageTime: String) {
                 dateTextView.text = getTimeFormat(messageTime.toLong())
             }
         }
-        adapter = ChatAdapter(this, itemClicked)
+        adapter = ChatAdapter(this, getTopTimeStampOfChat)
 
 
         //recyclerView
@@ -114,7 +117,8 @@ class ChatActivity : AppCompatActivity() {
             Log.d("SOCKET EXCEPTION", e.localizedMessage)
         }
         val time = System.currentTimeMillis().toString()
-        val seenMessage = SeenMessage(chatUID, myUID, "random id", time);
+        val seenMessage = SeenMessage(chatUID, myUID, "random id", time)
+
         mSocket.emit("seenMessage", Gson().toJson(seenMessage))
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -137,6 +141,8 @@ class ChatActivity : AppCompatActivity() {
                 adapter.submitData(list)
             }
         }
+
+        viewModel.updateUnseenMessageCount(chatUID, "0")
 
         callBtn.setOnClickListener {
 
@@ -167,21 +173,10 @@ class ChatActivity : AppCompatActivity() {
                 })
 
         }
+        chatDetailBtn.setOnClickListener {
+            startActivity(Intent(this, ChatDetailActivity::class.java))
+        }
         chatName.text = username
-
-        // observing the whole chatAndMessages data
-//        viewModel.allChatMessages.observe(this, { list ->
-//            list?.let {
-//                if(list.isNotEmpty()) {
-//                    adapter.update(list)
-//                    listOfMessage.addAll(list)
-//                    Log.d("List of messages", list.size.toString())
-//                    recyclerView.smoothScrollToPosition(list.first().messages.size-1)
-//                }
-//            }
-//
-//        })
-
 
         sendBtn.setOnClickListener {
             val time = System.currentTimeMillis().toString()
@@ -207,17 +202,23 @@ class ChatActivity : AppCompatActivity() {
             editText.text = ""
         }
 
-
+        // scroll smoothly to last item
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                linearLayoutManager.scrollToPosition(positionStart)
+            }
+        })
     }
 
     private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             // Get data from intent and update
             if(intent != null){
+                viewModel.updateUnseenMessageCount(chatUID, "0")
                 val time = System.currentTimeMillis().toString()
                 val chat_id  = intent.getStringExtra("data")!!.split(",")[1]
                 val id  = intent.getStringExtra("data")!!.split(",")[2]
-                val seenMessage = SeenMessage(chat_id, myUID, id, time);
+                val seenMessage = SeenMessage(chat_id, myUID, id, time)
                 mSocket.emit("seenMessage", Gson().toJson(seenMessage))
             }
         }

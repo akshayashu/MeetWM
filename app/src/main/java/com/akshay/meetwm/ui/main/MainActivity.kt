@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private var list = ArrayList<Contact>()
+    private var contactMap = HashMap<String, Contact>()
 
     var firebaseRef = Firebase.database.getReference("users")
 
@@ -173,7 +174,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        //received message
+        //I've received a new message
         mSocket.on("message"){
             if (it != null) {
                 val data = it[0]
@@ -183,14 +184,15 @@ class MainActivity : AppCompatActivity() {
                 val messageData = Gson().fromJson(data.toString(), MessageData::class.java)
                 viewModel.insertMessage(messageData)
 
+                // updating unseen msg count
+                val prevUnCountMsg = viewModel.getUnseenMessageCount(messageData.sender_uid).toInt()
+                viewModel.updateUnseenMessageCount(messageData.sender_uid, (prevUnCountMsg + 1).toString())
+
                 // emitting the other person that I've received his/her message
                 Log.d("MY IDDDDD", pref.getUserID()!!)
                 val receivedMessage = ReceivedMessage(messageData.chat_uid, pref.getUserID()!!, messageData.id,time)
                 mSocket.emit("receivedMessage", Gson().toJson(receivedMessage))
 
-                runOnUiThread {
-                    Toast.makeText(this, "$data received from Socket", Toast.LENGTH_SHORT).show()
-                }
                 intent.putExtra("data", "newMessage,${messageData.chat_uid},${messageData.id}");
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             }
@@ -203,21 +205,18 @@ class MainActivity : AppCompatActivity() {
                     if(snapshot.value.toString().trim() == ""){
                         return
                     }else {
+                        val contact = contactMap[snapshot.value.toString()]!!
+                        val intent = Intent(this@MainActivity, CallTestActivity::class.java)
+                        intent.putExtra("myId", pref.getUserID().toString())
+                        intent.putExtra("callerId", contact.uid)
+                        // one case has to be handled, when unknown person will call and his contact is not saved
+                        intent.putExtra("friendUserName", contact.display_name)
+                        intent.putExtra("photoURL", contact.dp_url)
+                        intent.putExtra("callType", "incoming")
+                        Toast.makeText(this@MainActivity, "Incoming call", Toast.LENGTH_SHORT).show()
+                        startActivity(intent)
+//                        viewModel.getCallingContact(snapshot.value.toString())
 
-                        viewModel.getCallingContact(snapshot.value.toString())
-                        viewModel.callerDetails.observe(this@MainActivity, { contact ->
-                            if (contact != null){
-                                val intent = Intent(this@MainActivity, CallTestActivity::class.java)
-                                intent.putExtra("myId", pref.getUserID().toString())
-                                intent.putExtra("callerId", contact.uid)
-                                // one case has to be handled, when unknown person will call and his contact is not saved
-                                intent.putExtra("friendUserName", contact.display_name)
-                                intent.putExtra("photoURL", contact.dp_url)
-                                intent.putExtra("callType", "incoming")
-                                Toast.makeText(this@MainActivity, "Incoming call", Toast.LENGTH_SHORT).show()
-                                startActivity(intent)
-                            }
-                        })
                     }
                 }
 
@@ -226,27 +225,11 @@ class MainActivity : AppCompatActivity() {
 
             })
 
-//        viewModel.callerDetails.observe(this, {
-//            if (it != null){
-//                startIncomingCallActivity(it)
-//            }
-//        })
-    }
-
-    private fun startIncomingCallActivity(contact : Contact) {
-        val intent = Intent(this@MainActivity, CallTestActivity::class.java)
-        intent.putExtra("myId", pref.getUserID().toString())
-        intent.putExtra("callerId", contact.uid)
-        // one case has to be handled, when unknown person will call and his contact is not saved
-        intent.putExtra("friendUserName", contact.display_name)
-        intent.putExtra("photoURL", contact.dp_url)
-        intent.putExtra("callType", "incoming")
-        Toast.makeText(this@MainActivity, "Incoming call", Toast.LENGTH_SHORT).show()
-        startActivity(intent)
     }
 
     private fun updateList() {
         for(item in list) {
+            contactMap[item.uid] = item
             viewModel.insertContact(item)
             Log.d("Contacts", "${item.display_name} , ${item.number}, ${item.id}")
         }

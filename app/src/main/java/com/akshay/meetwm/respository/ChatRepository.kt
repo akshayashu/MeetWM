@@ -33,4 +33,12 @@ class ChatRepository(private var chatDao: ChatDao, uid: String) {
         return chatDao.getUnseenMessageId(chat_uid, "not_yet");
     }
 
+    fun getUnseenMsgCount(chat_uid: String) : String{
+        return chatDao.getUnseenMessageCount(chat_uid)
+    }
+
+    fun updateUnseenMsgCount(chat_uid: String, value : String){
+        chatDao.updateUnseenMessageCount(chat_uid, value)
+    }
+
 }

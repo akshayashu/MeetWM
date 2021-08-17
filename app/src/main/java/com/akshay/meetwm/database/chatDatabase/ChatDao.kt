@@ -41,4 +41,12 @@ interface ChatDao {
     @Query("Select * from ChatModel where uid in (Select chat_uid from MessageData group by chat_uid)")
     fun getAllChatList() : LiveData<List<ChatAndMessages>>
 
+    @Transaction
+    @Query("Select unseen_msg_count from ChatModel where uid = :chat_uid")
+    fun getUnseenMessageCount(chat_uid: String) : String
+
+    @Transaction
+    @Query("Update ChatModel set unseen_msg_count = :value where uid = :chat_uid")
+    fun updateUnseenMessageCount(chat_uid: String, value : String)
+
 }

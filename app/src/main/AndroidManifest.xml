@@ -6,9 +6,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
-    <uses-feature android:name="android.hardware.camera.any" android:required="true" />
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -24,6 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MeetWM"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.ChatDetailActivity"></activity>
         <activity android:name=".ui.chatActivity.ChatActivity" />
         <activity android:name=".ui.RegisterUser.RegisterUser" />
         <activity android:name=".ui.contact.ContactActivity" />

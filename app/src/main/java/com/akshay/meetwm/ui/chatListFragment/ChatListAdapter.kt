@@ -27,6 +27,7 @@ class ChatListAdapter(private val list : ArrayList<ChatAndMessages>) : RecyclerV
         val dpImageView : ImageView = itemView.findViewById(R.id.chat_image_view)
         val lastMessage : TextView = itemView.findViewById(R.id.chat_last_message)
         val lastMessageTime : TextView = itemView.findViewById(R.id.chat_last_message_time)
+        val unseenMsgCount : TextView = itemView.findViewById(R.id.chat_unseen_msg)
         val chatLinearLayout : LinearLayout = itemView.findViewById(R.id.chatLinearLayout)
         
         fun bind(cur : ChatAndMessages) = with(itemView){
@@ -34,6 +35,17 @@ class ChatListAdapter(private val list : ArrayList<ChatAndMessages>) : RecyclerV
             name.text = cur.chat.name
             lastMessage.text = cur.messages.last().data
             lastMessageTime.text = getTimeFormat(context, cur.messages.last().send_timestamp.toLong())
+
+            if(cur.chat.unseen_msg_count == "0"){
+                unseenMsgCount.visibility = View.GONE
+            }else if(cur.chat.unseen_msg_count > "0"){
+                unseenMsgCount.visibility = View.VISIBLE
+                unseenMsgCount.text = cur.chat.unseen_msg_count
+            }else{
+                unseenMsgCount.visibility = View.VISIBLE
+                unseenMsgCount.text = "99+"
+            }
+
             Glide.with(context).load(cur.chat.dp_url).into(dpImageView)
 
             chatLinearLayout.setOnClickListener {
