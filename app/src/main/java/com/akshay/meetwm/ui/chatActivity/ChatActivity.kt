@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
+import androidx.paging.PagedList
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -106,7 +107,6 @@ class ChatActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
 
-        recyclerView.addOnScrollListener(listener)
 
         try {
             val socketInstance = application as SocketInstance
@@ -142,6 +142,7 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        recyclerView.addOnScrollListener(listener)
         viewModel.updateUnseenMessageCount(chatUID, "0")
 
         callBtn.setOnClickListener {
@@ -187,7 +188,6 @@ class ChatActivity : AppCompatActivity() {
             val myMessage = MessageData(id,"sent", chatUID, myUID, chatUID,"text_msg",
                 "", "","",
                 editText.text.toString().trim(), "not_yet", time,"not_yet")
-//            Log.d("My message", Gson().toJson(myMessage))
 
             mSocket.emit("sendMessage", Gson().toJson(myMessage))
 
@@ -200,38 +200,8 @@ class ChatActivity : AppCompatActivity() {
 
             viewModel.insertMessage(myMessage)
             editText.text = ""
+
         }
-        linearLayoutManager.scrollToPosition(10000)
-        // scroll smoothly to last item
-        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
-            override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-                linearLayoutManager.scrollToPosition(positionStart)
-            }
-
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                linearLayoutManager.scrollToPosition(positionStart)
-            }
-
-            override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
-                linearLayoutManager.scrollToPosition(positionStart)
-            }
-
-            override fun onChanged() {
-                super.onChanged()
-            }
-
-            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                super.onItemRangeRemoved(positionStart, itemCount)
-            }
-
-            override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-                linearLayoutManager.scrollToPosition(toPosition)
-            }
-
-            override fun onStateRestorationPolicyChanged() {
-                super.onStateRestorationPolicyChanged()
-            }
-        })
     }
 
     private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -261,7 +231,7 @@ class ChatActivity : AppCompatActivity() {
             super.onScrolled(recyclerView, dx, dy)
             if (listOfMessage.isNotEmpty()){
                 val position = linearLayoutManager.findFirstVisibleItemPosition()
-                Log.d("time of message", position.toString())
+//                Log.d("scrolling", position.toString())
                 val time = listOfMessage[position].send_timestamp
                 dateTextView.text = getTimeFormat(time.toLong())
 

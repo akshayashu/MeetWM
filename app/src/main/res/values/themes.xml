@@ -7,7 +7,6 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="fontFamily">@font/nunito</item>
         <!-- for collapsing toolbar text  -->
-        <item name="android:textColorPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondary_color</item>
         <item name="colorAccent">@color/light_green</item>

@@ -30,7 +30,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MeetWM"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ChatDetailActivity"></activity>
+        <activity android:name=".ui.SettingsActivity"></activity>
+        <activity android:name=".ui.ChatDetailActivity" />
         <activity android:name=".ui.chatActivity.ChatActivity" />
         <activity android:name=".ui.RegisterUser.RegisterUser" />
         <activity android:name=".ui.contact.ContactActivity" />

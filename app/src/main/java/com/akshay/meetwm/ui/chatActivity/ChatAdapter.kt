@@ -52,15 +52,12 @@ class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterIn
 
     override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
         val cur = getItem(position)
-        holder.bindTo(cur!!)
+        if(cur == null){
+            Log.d("RECYCLERVIEW NULL is at", position.toString())
+        }else
+            holder.bindTo(cur!!)
     }
 
-//    override fun getItemCount(): Int {
-//        if(messageList.size == 0){
-//            return 0;
-//        }
-//        return messageList.size
-//    }
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         private val mainMessage: TextView = itemView.findViewById(R.id.messageTextView)
@@ -91,8 +88,10 @@ class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterIn
 
         mClickListener = chatInterface
         val cur = getItem(holder.absoluteAdapterPosition)
-
-        mClickListener!!.getTopTimeStampOfChat(cur?.send_timestamp!!)
+        if(cur == null){
+            Log.d("RECYCLERVIEW NULL is at", "HERE")
+        }else
+            mClickListener!!.getTopTimeStampOfChat(cur?.send_timestamp!!)
 
     }
 

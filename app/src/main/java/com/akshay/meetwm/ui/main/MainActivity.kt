@@ -23,6 +23,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.akshay.meetwm.R
 import com.akshay.meetwm.model.*
 import com.akshay.meetwm.socket.SocketInstance
+import com.akshay.meetwm.ui.SettingsActivity
 import com.akshay.meetwm.ui.SharedPref
 import com.akshay.meetwm.ui.callActivity.CallTestActivity
 import com.akshay.meetwm.ui.chatListFragment.MainChatSharedViewModel
@@ -250,8 +251,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.settings_btn ->{
-                Toast.makeText(this, "Settings item", Toast.LENGTH_SHORT).show()
-                Log.d("settings", "pressed")
+                startActivity(Intent(this, SettingsActivity::class.java))
                 return true
             }
             R.id.newGroup_btn ->{

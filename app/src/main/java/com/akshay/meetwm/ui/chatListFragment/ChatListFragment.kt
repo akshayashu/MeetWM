@@ -63,13 +63,18 @@ class ChatFragment : Fragment() {
         recyclerView.adapter = adapter
 
         viewModel.allChat.observe(viewLifecycleOwner, {
+            perList.clear()
+            list.clear()
+            
             perList.addAll(it)
             list.addAll(it)
             adapter.update(it)
+            Log.d("Adding from"," view model")
         })
 
         mainViewModel.changeHeadline.observe(viewLifecycleOwner, {
             list = perList
+            Log.d("Adding from"," MainView Model")
             searchChat(it)
         })
 
