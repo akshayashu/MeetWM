@@ -15,18 +15,20 @@ import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.akshay.meetwm.model.MessageData
+import java.lang.Integer.min
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.max
 
 class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterInterface) :
     PagingDataAdapter<MessageData, ChatAdapter.ViewHolder>(DIFF_CALLBACK) {
 
-    private var messageList = ArrayList<MessageData>()
     private var MSG_TYP_LEFT = 0
     private var MSG_TYP_Right = 1
+    private var lastMessagePosition = 0
 
     companion object{
-        var mClickListener: ChatAdapter.ChatAdapterInterface? = null
+        var mClickListener: ChatAdapterInterface? = null
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MessageData>(){
             override fun areItemsTheSame(oldItem: MessageData, newItem: MessageData): Boolean {
                 return oldItem.id == newItem.id
@@ -54,8 +56,14 @@ class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterIn
         val cur = getItem(position)
         if(cur == null){
             Log.d("RECYCLERVIEW NULL is at", position.toString())
-        }else
-            holder.bindTo(cur!!)
+        }else {
+            // max position element
+            Log.d("ITEMS BINDING ", position.toString()+ " - " + cur.data)
+            lastMessagePosition = max(lastMessagePosition, position)
+
+            holder.bindTo(cur)
+            mClickListener?.lastMessagePositionNumber(lastMessagePosition)
+        }
     }
 
 
@@ -80,7 +88,8 @@ class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterIn
         }
     }
     interface ChatAdapterInterface{
-        fun getTopTimeStampOfChat(messageTime: String)
+        fun getTopTimeStampOfChat(messageTime : String)
+        fun lastMessagePositionNumber(pos : Int)
     }
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
@@ -91,7 +100,7 @@ class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterIn
         if(cur == null){
             Log.d("RECYCLERVIEW NULL is at", "HERE")
         }else
-            mClickListener!!.getTopTimeStampOfChat(cur?.send_timestamp!!)
+            mClickListener!!.getTopTimeStampOfChat(cur.send_timestamp)
 
     }
 
@@ -102,13 +111,6 @@ class ChatAdapter(val context: Context, private val chatInterface: ChatAdapterIn
         }else{
             return MSG_TYP_LEFT
         }
-    }
-
-    fun update(newList : List<MessageData>){
-        messageList.clear()
-        messageList.addAll(newList)
-
-        notifyDataSetChanged()
     }
 
     fun getTimeFormat(context: Context, timeStamp: Long) : String{

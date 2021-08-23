@@ -67,6 +67,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var dpImageView: CircleImageView
     lateinit var chatName : TextView
     lateinit var chatDetailBtn : LinearLayout
+    var lastMessagePosition = 0
 
     lateinit var currentContact : Contact
 
@@ -93,18 +94,25 @@ class ChatActivity : AppCompatActivity() {
         callBtn = findViewById(R.id.callBtn)
         dateTextView = findViewById(R.id.dateText)
 
+        // layoutManager
+        linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.stackFromEnd = true
+        recyclerView.layoutManager = linearLayoutManager
+
         val getTopTimeStampOfChat = object : ChatAdapter.ChatAdapterInterface{
             override fun getTopTimeStampOfChat(messageTime: String) {
                 dateTextView.text = getTimeFormat(messageTime.toLong())
             }
+
+            override fun lastMessagePositionNumber(pos: Int) {
+                lastMessagePosition = pos
+//                Log.d("ITEMS Scrolling to ", lastMessagePosition.toString())
+//                linearLayoutManager.scrollToPosition(lastMessagePosition)
+            }
         }
         adapter = ChatAdapter(this, getTopTimeStampOfChat)
 
-
         //recyclerView
-        linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.stackFromEnd = true
-        recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
 
 
@@ -129,11 +137,13 @@ class ChatActivity : AppCompatActivity() {
         val chatViewModelFactory = ChatViewModelFactory(application, chatUID);
         viewModel = ViewModelProvider(this, chatViewModelFactory).get(ChatViewModel::class.java)
 
+        // for setting profile topLayout
         viewModel.getContact(chatUID)
         viewModel.currentContact.observe(this, {
             currentContact = it
             Glide.with(this).load(currentContact.dp_url).into(dpImageView)
         })
+
         // observing only list of messages
         lifecycleScope.launch {
             viewModel.allMessages.collectLatest { list ->
@@ -185,22 +195,23 @@ class ChatActivity : AppCompatActivity() {
             if(editText.text.toString().trim().isEmpty()){
                 return@setOnClickListener
             }
+
             val myMessage = MessageData(id,"sent", chatUID, myUID, chatUID,"text_msg",
                 "", "","",
                 editText.text.toString().trim(), "not_yet", time,"not_yet")
-
-            mSocket.emit("sendMessage", Gson().toJson(myMessage))
-
             if(currentContact != null){
                 viewModel.insertChat(ChatModel(
                     chatUID, chatNumber, username,currentContact.global_name,
                     currentContact.status,"offline",
                     currentContact.dp_url, "0", true))
             }
-
             viewModel.insertMessage(myMessage)
             editText.text = ""
+            adapter.refresh()
 
+            Log.d("ITEMS Scrolling to ", lastMessagePosition.toString())
+            linearLayoutManager.scrollToPosition(lastMessagePosition)
+            mSocket.emit("sendMessage", Gson().toJson(myMessage))
         }
     }
 
@@ -213,9 +224,16 @@ class ChatActivity : AppCompatActivity() {
                 val chat_id  = intent.getStringExtra("data")!!.split(",")[1]
                 val id  = intent.getStringExtra("data")!!.split(",")[2]
                 val seenMessage = SeenMessage(chat_id, myUID, id, time)
+                adapter.refresh()
+                Log.d("ITEMS Scrolling to ", lastMessagePosition.toString())
+                linearLayoutManager.scrollToPosition(lastMessagePosition)
                 mSocket.emit("seenMessage", Gson().toJson(seenMessage))
             }
         }
+    }
+
+    private fun incrementCount() {
+        lastMessagePosition++
     }
 
     override fun onDestroy() {

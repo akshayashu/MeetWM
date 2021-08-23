@@ -34,8 +34,9 @@ class ChatViewModel(application: Application, uid: String) : AndroidViewModel(ap
         allChatMessages = repo.allChatMessages
         allMessages = Pager(
             PagingConfig(
-                pageSize = 10,
-                enablePlaceholders = true
+                pageSize = 20,
+                enablePlaceholders = true,
+                initialLoadSize = 20
             )
         ){
             dao.getMessages(uid)
