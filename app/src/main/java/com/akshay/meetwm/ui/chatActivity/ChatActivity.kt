@@ -96,7 +96,8 @@ class ChatActivity : AppCompatActivity() {
 
         // layoutManager
         linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.stackFromEnd = true
+//        linearLayoutManager.stackFromEnd = true
+        linearLayoutManager.reverseLayout = true
         recyclerView.layoutManager = linearLayoutManager
 
         val getTopTimeStampOfChat = object : ChatAdapter.ChatAdapterInterface{
@@ -147,7 +148,7 @@ class ChatActivity : AppCompatActivity() {
         // observing only list of messages
         lifecycleScope.launch {
             viewModel.allMessages.collectLatest { list ->
-                Log.d("LIST of Messages", list.toString())
+                Log.d("LIST of items", list.toString())
                 adapter.submitData(list)
             }
         }
@@ -210,7 +211,7 @@ class ChatActivity : AppCompatActivity() {
             adapter.refresh()
 
             Log.d("ITEMS Scrolling to ", lastMessagePosition.toString())
-            linearLayoutManager.scrollToPosition(lastMessagePosition)
+//            linearLayoutManager.scrollToPosition(0)
             mSocket.emit("sendMessage", Gson().toJson(myMessage))
         }
     }
@@ -225,8 +226,11 @@ class ChatActivity : AppCompatActivity() {
                 val id  = intent.getStringExtra("data")!!.split(",")[2]
                 val seenMessage = SeenMessage(chat_id, myUID, id, time)
                 adapter.refresh()
+
                 Log.d("ITEMS Scrolling to ", lastMessagePosition.toString())
-                linearLayoutManager.scrollToPosition(lastMessagePosition)
+                linearLayoutManager.scrollToPositionWithOffset(2, 1000)
+                recyclerView.scrollBy(2, 1000)
+
                 mSocket.emit("seenMessage", Gson().toJson(seenMessage))
             }
         }

@@ -12,7 +12,7 @@ import com.akshay.meetwm.model.MessageData
 interface ChatDao {
 
     @Transaction
-    @Query("Select * from MessageData where chat_uid = :uid order by send_timestamp ASC")
+    @Query("Select * from MessageData where chat_uid = :uid order by send_timestamp DESC")
     fun getMessages(uid : String) : PagingSource<Int, MessageData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
