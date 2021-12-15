@@ -21,3 +21,8 @@ This is an android app which is just like whatsApp messenger.
 * 𝗣𝗲𝗲𝗿𝗝𝗦, 𝗣𝗲𝗲𝗿𝘀 - Video/Audio Calling📹
 * 𝗛𝗲𝗿𝗼𝗸𝘂 - Deployed on heroku web services☁
 * 𝗠𝗼𝗻𝗴𝗼𝗗𝗕 - for Database management🗂
+
+
+![MeetWM preview 1](https://user-images.githubusercontent.com/54989354/146180573-2bb7e70b-cc2f-4ad1-bccf-4945793f3ec0.png)
+
+![MeetWM preview 2](https://user-images.githubusercontent.com/54989354/146181839-f7b5831d-f5c7-4e50-88c6-04b95cfeabd5.png)
